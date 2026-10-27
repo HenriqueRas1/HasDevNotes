@@ -1,0 +1,62 @@
+# Publica o HasDevNotes no GitHub Pages a cada push na main.
+#
+# O Pages não sabe compilar React/TypeScript: ele só serve arquivos prontos.
+# Este workflow roda o build numa máquina do GitHub e publica a pasta dist/.
+name: Deploy no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Permite rodar manualmente pela aba Actions.
+  workflow_dispatch:
+
+# Permissões mínimas para publicar no Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Se dois pushes chegarem juntos, só o mais recente é publicado.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # O site fica em https://<usuario>.github.io/<repositorio>/
+          BASE_PATH: /${{ github.event.repository.name }}/
+
+      # O Pages não conhece as rotas do React Router: /HasDevNotes/javascript
+      # daria 404. Com uma cópia do index.html como 404.html, o Pages entrega
+      # a aplicação e o React Router mostra a página certa.
+      - name: Fallback de rotas (SPA)
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

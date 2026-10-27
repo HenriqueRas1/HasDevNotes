@@ -18,21 +18,29 @@ import { TechnologyPage } from '@/pages/TechnologyPage'
  * Segmentos com ":" são parâmetros. Em /javascript/arrays, por exemplo,
  * techSlug = "javascript" e categorySlug = "arrays".
  */
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      element: <AppLayout />,
+      // Erros inesperados em qualquer página caem aqui em vez de deixar a tela em branco.
+      errorElement: <ErrorPage />,
+      children: [
+        { index: true, element: <HomePage /> },
+        // Rotas fixas têm prioridade sobre parâmetros: /favorites e /search nunca
+        // são lidas como uma tecnologia com esse nome.
+        { path: 'favorites', element: <FavoritesPage /> },
+        { path: 'search', element: <SearchPage /> },
+        { path: ':techSlug', element: <TechnologyPage /> },
+        { path: ':techSlug/:categorySlug', element: <CategoryPage /> },
+        { path: ':techSlug/:categorySlug/:sheetSlug', element: <SheetPage /> },
+        { path: '*', element: <NotFoundPage /> },
+      ],
+    },
+  ],
   {
-    element: <AppLayout />,
-    // Erros inesperados em qualquer página caem aqui em vez de deixar a tela em branco.
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <HomePage /> },
-      // Rotas fixas têm prioridade sobre parâmetros: /favorites e /search nunca
-      // são lidas como uma tecnologia com esse nome.
-      { path: 'favorites', element: <FavoritesPage /> },
-      { path: 'search', element: <SearchPage /> },
-      { path: ':techSlug', element: <TechnologyPage /> },
-      { path: ':techSlug/:categorySlug', element: <CategoryPage /> },
-      { path: ':techSlug/:categorySlug/:sheetSlug', element: <SheetPage /> },
-      { path: '*', element: <NotFoundPage /> },
-    ],
+    // Prefixo de todas as rotas: "/HasDevNotes" no GitHub Pages, "/" no dev.
+    // BASE_URL vem do `base` do vite.config.ts. Com isso, <Link to="/favorites">
+    // vira "/HasDevNotes/favorites" sem mudar nenhum componente.
+    basename: import.meta.env.BASE_URL,
   },
-])
+)

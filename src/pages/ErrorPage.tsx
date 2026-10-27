@@ -26,8 +26,9 @@ export function ErrorPage() {
             {message}
           </pre>
         )}
+        {/* <a> comum (não <Link>): recarrega a aplicação do zero, já que algo falhou. */}
         <a
-          href="/"
+          href={import.meta.env.BASE_URL}
           className="mt-6 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-bg hover:opacity-90"
         >
           Recarregar a página inicial
