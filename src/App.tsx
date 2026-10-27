@@ -1,50 +1,53 @@
-// Tela provisória da Etapa 1: serve só para validar o Tailwind, os tokens de
-// cor e as fontes. Será substituída pelo layout real na Etapa 3.
-const tokens = [
-  { name: 'bg', className: 'bg-bg' },
-  { name: 'surface', className: 'bg-surface' },
-  { name: 'surface-2', className: 'bg-surface-2' },
-  { name: 'border', className: 'bg-border' },
-  { name: 'muted', className: 'bg-muted' },
-  { name: 'accent', className: 'bg-accent' },
-  { name: 'accent-2', className: 'bg-accent-2' },
-  { name: 'success', className: 'bg-success' },
-  { name: 'warning', className: 'bg-warning' },
-  { name: 'danger', className: 'bg-danger' },
-]
+import {
+  getCategoriesByTechnology,
+  getLibraryStats,
+  getSheetPath,
+  getSheetsByCategory,
+  getTechnologies,
+} from '@/data/library'
 
+// Tela provisória da Etapa 2: lista todo o conteúdo para validar o modelo de
+// dados e a camada de acesso. Será substituída pelo layout real na Etapa 3.
 function App() {
+  const stats = getLibraryStats()
+
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-8 px-4 py-12">
+    <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-8 px-4 py-12">
       <header className="space-y-2">
-        <p className="font-mono text-sm text-accent">// etapa 1 concluída</p>
+        <p className="font-mono text-sm text-accent">// etapa 2 · tipos e conteúdo</p>
         <h1 className="text-4xl font-bold tracking-tight">
           Has<span className="text-accent">Dev</span>Notes
         </h1>
-        <p className="text-muted">Sua biblioteca pessoal de cheat sheets de programação.</p>
+        <p className="text-muted">
+          {stats.technologies} tecnologias · {stats.categories} categorias · {stats.sheets} cheat sheets
+        </p>
       </header>
 
-      <section className="rounded-xl border border-border bg-surface p-5">
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted">
-          Tokens de cor
-        </h2>
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-          {tokens.map((token) => (
-            <li key={token.name} className="space-y-1.5">
-              <div className={`h-10 rounded-md border border-border ${token.className}`} />
-              <code className="font-mono text-xs text-muted">{token.name}</code>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {getTechnologies().map((technology) => (
+        <section key={technology.id} className="rounded-xl border border-border bg-surface p-5">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <span className="size-2.5 rounded-full" style={{ backgroundColor: technology.color }} />
+            {technology.name}
+          </h2>
+          <p className="mb-4 text-sm text-muted">{technology.description}</p>
 
-      <pre className="overflow-x-auto rounded-xl border border-border bg-surface-2 p-5 font-mono text-sm">
-        <code>
-          <span className="text-accent-2">const</span> stack = [
-          <span className="text-success">'React'</span>, <span className="text-success">'TypeScript'</span>,{' '}
-          <span className="text-success">'Vite'</span>, <span className="text-success">'Tailwind'</span>]
-        </code>
-      </pre>
+          <div className="space-y-4">
+            {getCategoriesByTechnology(technology.id).map((category) => (
+              <div key={category.id}>
+                <h3 className="text-sm font-medium">{category.name}</h3>
+                <ul className="mt-1 space-y-1">
+                  {getSheetsByCategory(category.id).map((sheet) => (
+                    <li key={sheet.id} className="flex flex-wrap items-baseline gap-x-3 text-sm">
+                      <span>{sheet.title}</span>
+                      <code className="font-mono text-xs text-muted">{getSheetPath(sheet)}</code>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
     </main>
   )
 }
