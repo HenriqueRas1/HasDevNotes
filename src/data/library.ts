@@ -87,11 +87,24 @@ export function getRelatedSheets(sheet: CheatSheet): CheatSheet[] {
     .filter((s): s is CheatSheet => s !== undefined)
 }
 
-/** Monta a URL de um Cheat Sheet: /javascript/arrays/map */
+// ── URLs ───────────────────────────────────────────────────────────────────
+// Ficam centralizadas aqui: se o formato das rotas mudar, só este trecho muda.
+
+/** /javascript */
+export function getTechnologyPath(technology: Technology): string {
+  return `/${technology.slug}`
+}
+
+/** /javascript/arrays */
+export function getCategoryPath(category: Category): string {
+  const technology = technologyById.get(category.technologyId)
+  return `/${technology?.slug}/${category.slug}`
+}
+
+/** /javascript/arrays/map */
 export function getSheetPath(sheet: CheatSheet): string {
-  const technology = technologyById.get(sheet.technologyId)
   const category = categoryById.get(sheet.categoryId)
-  return `/${technology?.slug}/${category?.slug}/${sheet.slug}`
+  return category ? `${getCategoryPath(category)}/${sheet.slug}` : '/'
 }
 
 // ── Estatísticas ───────────────────────────────────────────────────────────

@@ -1,7 +1,9 @@
 import { ChevronRight, Home, Star, X } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
+import { NavLink, useLocation } from 'react-router'
 import {
   getCategoriesByTechnology,
+  getCategoryPath,
   getLibraryStats,
   getSheetsByCategory,
   getSheetsByTechnology,
@@ -19,6 +21,10 @@ interface SidebarProps {
 
 export function Sidebar({ open, onClose }: SidebarProps) {
   const stats = getLibraryStats()
+
+  // O primeiro trecho da URL diz qual tecnologia está aberta: /javascript/arrays → "javascript".
+  const { pathname } = useLocation()
+  const activeTechSlug = pathname.split('/')[1]
 
   return (
     <aside
@@ -49,12 +55,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-4">
         <ul className="space-y-0.5">
           <li>
-            <SidebarLink href="/" icon={<Home className="size-4" />}>
+            <SidebarLink to="/" icon={<Home className="size-4" />}>
               Início
             </SidebarLink>
           </li>
           <li>
-            <SidebarLink href="/favorites" icon={<Star className="size-4" />}>
+            <SidebarLink to="/favorites" icon={<Star className="size-4" />}>
               Favoritos
             </SidebarLink>
           </li>
@@ -64,7 +70,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           <h2 className="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted">Tecnologias</h2>
           <ul className="space-y-0.5">
             {getTechnologies().map((technology) => (
-              <TechnologyItem key={technology.id} technology={technology} />
+              <TechnologyItem
+                key={technology.id}
+                technology={technology}
+                active={technology.slug === activeTechSlug}
+              />
             ))}
           </ul>
         </div>
@@ -78,26 +88,44 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 }
 
 interface SidebarLinkProps {
-  href: string
+  to: string
   icon: ReactNode
   children: ReactNode
 }
 
-function SidebarLink({ href, icon, children }: SidebarLinkProps) {
+function SidebarLink({ to, icon, children }: SidebarLinkProps) {
   return (
-    <a
-      href={href}
-      className="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-text"
+    // NavLink sabe se a URL atual é a dele e passa `isActive` para o className.
+    // `end` faz "/" ficar ativo só na página inicial, e não em toda URL que começa com "/".
+    <NavLink
+      to={to}
+      end
+      className={({ isActive }) =>
+        cn(
+          'flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-surface-2',
+          isActive ? 'bg-surface-2 text-text' : 'text-muted hover:text-text',
+        )
+      }
     >
       {icon}
       {children}
-    </a>
+    </NavLink>
   )
 }
 
+interface TechnologyItemProps {
+  technology: Technology
+  /** true quando a URL atual está dentro desta tecnologia. */
+  active: boolean
+}
+
 /** Uma tecnologia que expande para mostrar suas categorias. */
-function TechnologyItem({ technology }: { technology: Technology }) {
-  const [expanded, setExpanded] = useState(false)
+function TechnologyItem({ technology, active }: TechnologyItemProps) {
+  // null = o usuário ainda não clicou na seta, então segue a URL (abre se estiver ativa).
+  // true/false = o usuário escolheu, e a escolha dele vale.
+  const [userExpanded, setUserExpanded] = useState<boolean | null>(null)
+  const expanded = userExpanded ?? active
+
   const categories = getCategoriesByTechnology(technology.id)
   const listId = `sidebar-${technology.id}`
 
@@ -105,10 +133,13 @@ function TechnologyItem({ technology }: { technology: Technology }) {
     <li>
       <button
         type="button"
-        onClick={() => setExpanded((value) => !value)}
+        onClick={() => setUserExpanded(!expanded)}
         aria-expanded={expanded}
         aria-controls={listId}
-        className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-surface-2"
+        className={cn(
+          'flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-surface-2',
+          active ? 'text-text' : 'text-muted hover:text-text',
+        )}
       >
         <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: technology.color }} />
         <span className="flex-1 text-left">{technology.name}</span>
@@ -118,19 +149,45 @@ function TechnologyItem({ technology }: { technology: Technology }) {
 
       {expanded && (
         <ul id={listId} className="mt-0.5 mb-1 ml-[1.15rem] space-y-0.5 border-l border-border pl-2">
+          <li>
+            <SubLink to={`/${technology.slug}`} end>
+              Visão geral
+            </SubLink>
+          </li>
           {categories.map((category) => (
             <li key={category.id}>
-              <a
-                href={`/${technology.slug}/${category.slug}`}
-                className="flex items-center justify-between rounded-md px-2 py-1 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-text"
-              >
+              <SubLink to={getCategoryPath(category)}>
                 {category.name}
-                <span className="font-mono text-xs">{getSheetsByCategory(category.id).length}</span>
-              </a>
+                <span className="font-mono text-xs text-muted">{getSheetsByCategory(category.id).length}</span>
+              </SubLink>
             </li>
           ))}
         </ul>
       )}
     </li>
+  )
+}
+
+interface SubLinkProps {
+  to: string
+  end?: boolean
+  children: ReactNode
+}
+
+/** Link de segundo nível (dentro de uma tecnologia). */
+function SubLink({ to, end, children }: SubLinkProps) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        cn(
+          'flex items-center justify-between rounded-md px-2 py-1 text-sm transition-colors hover:bg-surface-2',
+          isActive ? 'font-medium text-accent' : 'text-muted hover:text-text',
+        )
+      }
+    >
+      {children}
+    </NavLink>
   )
 }

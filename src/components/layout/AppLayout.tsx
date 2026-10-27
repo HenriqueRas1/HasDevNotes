@@ -1,17 +1,30 @@
-import { type ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Outlet, ScrollRestoration, useLocation } from 'react-router'
 import { cn } from '@/lib/cn'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 
 /**
- * Estrutura fixa de todas as telas: Sidebar à esquerda, Header no topo e o
- * conteúdo da página (children) no meio.
+ * Rota de layout: estrutura fixa de todas as telas. A página da URL atual é
+ * desenhada no lugar do <Outlet />.
  *
  * Abaixo de lg (1024px) a Sidebar vira um drawer controlado pelo estado
  * `sidebarOpen`.
  */
-export function AppLayout({ children }: { children: ReactNode }) {
+export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // Fecha o drawer a cada navegação. `location.key` muda a cada clique em um
+  // link, inclusive quando o destino é a página atual.
+  //
+  // Isto é um "ajuste de estado durante a renderização": compara o valor
+  // atual com o anterior e corrige o estado na hora, sem esperar um useEffect.
+  const location = useLocation()
+  const [lastLocationKey, setLastLocationKey] = useState(location.key)
+  if (location.key !== lastLocationKey) {
+    setLastLocationKey(location.key)
+    setSidebarOpen(false)
+  }
 
   // Com o drawer aberto: Esc fecha e a página de trás não rola.
   useEffect(() => {
@@ -48,9 +61,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <div className="flex min-w-0 flex-col">
         <Header sidebarOpen={sidebarOpen} onOpenSidebar={() => setSidebarOpen(true)} />
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-10">
-          <div className="mx-auto max-w-5xl">{children}</div>
+          <div className="mx-auto max-w-5xl">
+            <Outlet />
+          </div>
         </main>
       </div>
+
+      {/* Volta ao topo ao abrir uma página nova e restaura a posição no "voltar". */}
+      <ScrollRestoration />
     </div>
   )
 }
