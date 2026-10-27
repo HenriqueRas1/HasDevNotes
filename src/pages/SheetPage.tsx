@@ -16,6 +16,7 @@ import {
   getTechnologyPath,
 } from '@/data/library'
 import { FavoriteButton } from '@/features/favorites/FavoriteButton'
+import { NotesPanel } from '@/features/notes/NotesPanel'
 import { NotFoundPage } from './NotFoundPage'
 
 export function SheetPage() {
@@ -80,6 +81,12 @@ export function SheetPage() {
             <TipList tips={sheet.tips} />
           </SheetSection>
         )}
+
+        <SheetSection id="notes" title="Minhas anotações">
+          {/* key: ao ir para outra ficha (ex.: um Relacionado), o React recria o
+              painel do zero. Sem isso, um editor aberto "vazaria" para a outra ficha. */}
+          <NotesPanel key={sheet.id} sheetId={sheet.id} />
+        </SheetSection>
 
         {sheet.tags.length > 0 && (
           <SheetSection id="tags" title="Tags">
