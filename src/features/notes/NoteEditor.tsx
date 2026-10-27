@@ -70,9 +70,14 @@ export function NoteEditor({ initialContent = '', submitLabel, onSubmit, onCance
 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="font-mono text-xs text-muted">
-          {content.length}/{NOTE_MAX_LENGTH} · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> salva · <kbd>Esc</kbd> cancela
+          {content.length}/{NOTE_MAX_LENGTH}
+          {/* Atalhos de teclado só fazem sentido em telas com teclado físico. */}
+          <span className="hidden sm:inline">
+            {' · '}
+            <kbd>Ctrl</kbd>+<kbd>Enter</kbd> salva · <kbd>Esc</kbd> cancela
+          </span>
         </span>
-        <div className="flex gap-2">
+        <div className="ml-auto flex gap-2">
           <Button variant="ghost" onClick={onCancel} disabled={saving}>
             Cancelar
           </Button>

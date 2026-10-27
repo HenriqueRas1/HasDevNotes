@@ -9,6 +9,7 @@ export function NotFoundPage() {
       <EmptyState
         icon={<FileQuestion className="size-6" />}
         title="Página não encontrada"
+        titleAs="h1"
         description="O endereço não corresponde a nenhuma tecnologia, categoria ou cheat sheet da biblioteca."
         action={
           <Link

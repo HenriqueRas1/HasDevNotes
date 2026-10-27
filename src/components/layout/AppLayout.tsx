@@ -54,6 +54,15 @@ export function AppLayout() {
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[17rem_1fr]">
+      {/* "Skip link": primeiro item do Tab. Quem navega pelo teclado pula a
+          sidebar inteira e vai direto ao conteúdo. Só aparece quando focado. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-bg"
+      >
+        Pular para o conteúdo
+      </a>
+
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Fundo escurecido atrás do drawer; clicar nele fecha o menu. */}
@@ -72,7 +81,8 @@ export function AppLayout() {
           onOpenSidebar={() => setSidebarOpen(true)}
           onOpenSearch={openSearch}
         />
-        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-10">
+        {/* tabIndex={-1} permite que o skip link mova o foco para cá. */}
+        <main id="main" tabIndex={-1} className="flex-1 px-4 py-8 outline-none sm:px-6 lg:px-10">
           <div className="mx-auto max-w-5xl">
             <Outlet />
           </div>
@@ -81,8 +91,13 @@ export function AppLayout() {
 
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
 
-      {/* Volta ao topo ao abrir uma página nova e restaura a posição no "voltar". */}
-      <ScrollRestoration />
+      {/* Volta ao topo ao abrir uma página nova e restaura a posição no "voltar".
+          A primeira página carregada (endereço digitado, F5, link externo) sempre
+          recebe a chave "default"; usar o endereço nesse caso evita que uma página
+          herde a rolagem de outra. */}
+      <ScrollRestoration
+        getKey={(location) => (location.key === 'default' ? location.pathname + location.search : location.key)}
+      />
     </div>
   )
 }

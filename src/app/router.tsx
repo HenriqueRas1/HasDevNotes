@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CategoryPage } from '@/pages/CategoryPage'
+import { ErrorPage } from '@/pages/ErrorPage'
 import { FavoritesPage } from '@/pages/FavoritesPage'
 import { HomePage } from '@/pages/HomePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
@@ -20,6 +21,8 @@ import { TechnologyPage } from '@/pages/TechnologyPage'
 export const router = createBrowserRouter([
   {
     element: <AppLayout />,
+    // Erros inesperados em qualquer página caem aqui em vez de deixar a tela em branco.
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
       // Rotas fixas têm prioridade sobre parâmetros: /favorites e /search nunca

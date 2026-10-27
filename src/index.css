@@ -24,7 +24,7 @@
   --danger: #f87171;
 
   /* Cores do syntax highlighting (usadas em src/lib/highlight.ts) */
-  --syntax-comment: #6b7489;
+  --syntax-comment: #7f88a0; /* contraste ≥ 4,5:1 sobre surface-2 (WCAG AA) */
   --syntax-keyword: #c792ea;
   --syntax-string: #9ece6a;
   --syntax-function: #7aa2f7;
@@ -71,5 +71,23 @@
 
   ::selection {
     @apply bg-accent/30;
+  }
+
+  /* Contorno de foco visível para quem navega pelo teclado. O :focus-visible
+     não aparece em cliques com o mouse, só quando o foco vem do teclado. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Quem pediu ao sistema para reduzir animações não vê transições. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

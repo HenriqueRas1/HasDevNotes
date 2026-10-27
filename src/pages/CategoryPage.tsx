@@ -1,6 +1,8 @@
+import { FileText } from 'lucide-react'
 import { useParams } from 'react-router'
 import { SheetCard } from '@/components/cards/SheetCard'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { getCategoryBySlug, getSheetsByCategory, getTechnologyBySlug, getTechnologyPath } from '@/data/library'
 import { NotFoundPage } from './NotFoundPage'
@@ -32,13 +34,22 @@ export function CategoryPage() {
         meta={`${sheets.length} cheat sheets`}
       />
 
-      <ul className="grid gap-4 md:grid-cols-2">
-        {sheets.map((sheet) => (
-          <li key={sheet.id}>
-            <SheetCard sheet={sheet} />
-          </li>
-        ))}
-      </ul>
+      <h2 className="sr-only">Cheat sheets</h2>
+      {sheets.length === 0 ? (
+        <EmptyState
+          icon={<FileText className="size-6" />}
+          title="Nenhum cheat sheet ainda"
+          description={`A categoria ${category.name} ainda está vazia. Adicione fichas em src/data/content.`}
+        />
+      ) : (
+        <ul className="grid gap-4 md:grid-cols-2">
+          {sheets.map((sheet) => (
+            <li key={sheet.id}>
+              <SheetCard sheet={sheet} />
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   )
 }

@@ -49,13 +49,16 @@ export function SearchPage() {
           description={`Nada encontrado para “${query.trim()}”. Tente outra palavra ou menos termos.`}
         />
       ) : (
-        <ul className="grid gap-4 md:grid-cols-2">
-          {results.map(({ sheet }) => (
-            <li key={sheet.id}>
-              <SheetCard sheet={sheet} showContext />
-            </li>
-          ))}
-        </ul>
+        <>
+          <h2 className="sr-only">Resultados</h2>
+          <ul className="grid gap-4 md:grid-cols-2">
+            {results.map(({ sheet }) => (
+              <li key={sheet.id}>
+                <SheetCard sheet={sheet} showContext />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </>
   )
