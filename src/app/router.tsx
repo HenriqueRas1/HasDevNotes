@@ -4,6 +4,7 @@ import { CategoryPage } from '@/pages/CategoryPage'
 import { FavoritesPage } from '@/pages/FavoritesPage'
 import { HomePage } from '@/pages/HomePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
+import { SearchPage } from '@/pages/SearchPage'
 import { SheetPage } from '@/pages/SheetPage'
 import { TechnologyPage } from '@/pages/TechnologyPage'
 
@@ -21,9 +22,10 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      // Rotas fixas têm prioridade sobre parâmetros: /favorites nunca é lida
-      // como uma tecnologia chamada "favorites".
+      // Rotas fixas têm prioridade sobre parâmetros: /favorites e /search nunca
+      // são lidas como uma tecnologia com esse nome.
       { path: 'favorites', element: <FavoritesPage /> },
+      { path: 'search', element: <SearchPage /> },
       { path: ':techSlug', element: <TechnologyPage /> },
       { path: ':techSlug/:categorySlug', element: <CategoryPage /> },
       { path: ':techSlug/:categorySlug/:sheetSlug', element: <SheetPage /> },

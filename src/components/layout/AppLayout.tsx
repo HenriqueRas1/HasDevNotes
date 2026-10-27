@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Outlet, ScrollRestoration, useLocation } from 'react-router'
+import { SearchDialog } from '@/features/search/SearchDialog'
+import { useSearchShortcut } from '@/features/search/useSearchShortcut'
 import { cn } from '@/lib/cn'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
@@ -13,6 +15,12 @@ import { Sidebar } from './Sidebar'
  */
 export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+
+  // useCallback mantém a mesma função entre renderizações, para o hook do
+  // atalho não precisar refazer o addEventListener a cada render.
+  const openSearch = useCallback(() => setSearchOpen(true), [])
+  useSearchShortcut(openSearch)
 
   // Fecha o drawer a cada navegação. `location.key` muda a cada clique em um
   // link, inclusive quando o destino é a página atual.
@@ -59,13 +67,19 @@ export function AppLayout() {
       />
 
       <div className="flex min-w-0 flex-col">
-        <Header sidebarOpen={sidebarOpen} onOpenSidebar={() => setSidebarOpen(true)} />
+        <Header
+          sidebarOpen={sidebarOpen}
+          onOpenSidebar={() => setSidebarOpen(true)}
+          onOpenSearch={openSearch}
+        />
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-10">
           <div className="mx-auto max-w-5xl">
             <Outlet />
           </div>
         </main>
       </div>
+
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Volta ao topo ao abrir uma página nova e restaura a posição no "voltar". */}
       <ScrollRestoration />
