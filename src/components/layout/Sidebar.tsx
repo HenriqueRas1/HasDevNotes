@@ -163,7 +163,7 @@ function TechnologyItem({ technology, active }: TechnologyItemProps) {
             <li key={category.id}>
               <SubLink to={getCategoryPath(category)}>
                 {category.name}
-                <span className="font-mono text-xs text-muted">{getSheetsByCategory(category.id).length}</span>
+                <span className="shrink-0 font-mono text-xs text-muted">{getSheetsByCategory(category.id).length}</span>
               </SubLink>
             </li>
           ))}
@@ -187,7 +187,7 @@ function SubLink({ to, end, children }: SubLinkProps) {
       end={end}
       className={({ isActive }) =>
         cn(
-          'flex items-center justify-between rounded-md px-2 py-1 text-sm transition-colors hover:bg-surface-2',
+          'flex items-center justify-between gap-2 rounded-md px-2 py-1 text-sm transition-colors hover:bg-surface-2',
           isActive ? 'font-medium text-accent' : 'text-muted hover:text-text',
         )
       }
