@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { InlineCode } from './InlineCode'
 
 interface PageHeaderProps {
   title: string
@@ -14,7 +15,11 @@ export function PageHeader({ title, description, accentColor, meta }: PageHeader
     <header className="mb-8 space-y-2">
       {accentColor && <span className="mb-3 block h-1 w-12 rounded-full" style={{ backgroundColor: accentColor }} />}
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-      {description && <p className="max-w-2xl text-muted">{description}</p>}
+      {description && (
+        <p className="max-w-2xl text-muted">
+          <InlineCode text={description} />
+        </p>
+      )}
       {meta && <p className="font-mono text-xs text-muted">{meta}</p>}
     </header>
   )

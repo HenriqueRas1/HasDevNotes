@@ -45,7 +45,7 @@ export const git: TechnologyContent = {
       technologyId: 'git',
       categoryId: 'git-basics',
       title: 'git add e git commit',
-      description: 'add escolhe quais mudanças entram no próximo registro; commit grava esse registro no histórico.',
+      description: '`add` escolhe quais mudanças entram no próximo registro; `commit` grava esse registro no histórico.',
       whenToUse: 'Sempre que concluir uma unidade lógica de trabalho, como uma funcionalidade, uma correção ou uma etapa.',
       syntax: code`
 git add <arquivo>        # adiciona um arquivo à "staging area"
@@ -71,7 +71,7 @@ git commit -m "Adiciona tela inicial"
         { kind: 'tip', text: 'Prefira commits pequenos e frequentes: fica fácil revisar e desfazer.' },
         {
           kind: 'warning',
-          text: 'Cuidado com git add . em pastas com arquivos sensíveis (.env, senhas). Use o .gitignore.',
+          text: 'Cuidado com `git add .` em pastas com arquivos sensíveis (`.env`, senhas). Use o `.gitignore`.',
         },
       ],
       tags: ['commit', 'staging', 'histórico'],
@@ -83,7 +83,7 @@ git commit -m "Adiciona tela inicial"
       technologyId: 'git',
       categoryId: 'git-basics',
       title: 'git status e git log',
-      description: 'status mostra o estado atual dos arquivos; log mostra o histórico de commits.',
+      description: '`status` mostra o estado atual dos arquivos; `log` mostra o histórico de commits.',
       whenToUse: 'Antes de commitar, para conferir o que mudou, e quando precisar entender o histórico do projeto.',
       syntax: code`
 git status            # o que mudou e o que está na staging
@@ -100,8 +100,8 @@ git log --oneline --graph --all
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Rode git status com frequência: ele costuma sugerir o próximo comando.' },
-        { kind: 'tip', text: 'git diff --staged mostra o que já foi adicionado e vai entrar no próximo commit.' },
+        { kind: 'tip', text: 'Rode `git status` com frequência: ele costuma sugerir o próximo comando.' },
+        { kind: 'tip', text: '`git diff --staged` mostra o que já foi adicionado e vai entrar no próximo commit.' },
       ],
       tags: ['status', 'log', 'histórico'],
       relatedIds: ['git-commit'],
@@ -112,7 +112,7 @@ git log --oneline --graph --all
       technologyId: 'git',
       categoryId: 'git-branches',
       title: 'Criar e trocar de branch',
-      description: 'Uma branch é uma linha independente de commits. switch troca a branch em que você está trabalhando.',
+      description: 'Uma branch é uma linha independente de commits. `switch` troca a branch em que você está trabalhando.',
       whenToUse: 'Para desenvolver uma funcionalidade ou correção isolada, sem afetar a branch principal.',
       syntax: code`
 git branch                 # lista as branches
@@ -131,10 +131,10 @@ git switch main
         },
       ],
       tips: [
-        { kind: 'tip', text: 'git switch é a forma moderna e mais clara do antigo git checkout para trocar de branch.' },
+        { kind: 'tip', text: '`git switch` é a forma moderna e mais clara do antigo `git checkout` para trocar de branch.' },
         {
           kind: 'warning',
-          text: 'Mudanças não commitadas "acompanham" você na troca de branch. Faça commit ou git stash antes.',
+          text: 'Mudanças não commitadas "acompanham" você na troca de branch. Faça commit ou `git stash` antes.',
         },
       ],
       tags: ['branch', 'switch', 'fluxo'],
@@ -174,7 +174,7 @@ git commit
           kind: 'tip',
           text: 'Conflito não é erro: o Git só não sabe qual versão manter. Escolha, remova os marcadores e faça commit.',
         },
-        { kind: 'tip', text: 'git merge --abort cancela um merge em andamento e volta ao estado anterior.' },
+        { kind: 'tip', text: '`git merge --abort` cancela um merge em andamento e volta ao estado anterior.' },
       ],
       tags: ['merge', 'branch', 'conflito'],
       relatedIds: ['git-branch-switch'],
@@ -185,7 +185,7 @@ git commit
       technologyId: 'git',
       categoryId: 'git-remote',
       title: 'git push e git pull',
-      description: 'push envia seus commits ao repositório remoto; pull traz e integra os commits de lá.',
+      description: '`push` envia seus commits ao repositório remoto; `pull` traz e integra os commits de lá.',
       whenToUse: 'Para publicar seu trabalho e para se atualizar com o que outras pessoas (ou outros computadores) enviaram.',
       syntax: code`
 git remote add origin <url>   # conecta a um remoto (uma vez)
@@ -203,10 +203,10 @@ git push -u origin main
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Faça git pull antes de começar a trabalhar para evitar conflitos.' },
+        { kind: 'tip', text: 'Faça `git pull` antes de começar a trabalhar para evitar conflitos.' },
         {
           kind: 'warning',
-          text: 'Evite git push --force em branches compartilhadas: ele sobrescreve o histórico remoto.',
+          text: 'Evite `git push --force` em branches compartilhadas: ele sobrescreve o histórico remoto.',
         },
         { kind: 'mistake', text: 'Tentar fazer push sem commitar antes. O push só envia commits, não arquivos soltos.' },
       ],

@@ -1,18 +1,22 @@
-import { Construction } from 'lucide-react'
 import { useParams } from 'react-router'
+import { SheetCard } from '@/components/cards/SheetCard'
+import { CodeBlock } from '@/components/sheet/CodeBlock'
+import { SheetSection } from '@/components/sheet/SheetSection'
+import { TipList } from '@/components/sheet/TipList'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
-import { EmptyState } from '@/components/ui/EmptyState'
+import { InlineCode } from '@/components/ui/InlineCode'
 import { PageHeader } from '@/components/ui/PageHeader'
+import { Tag } from '@/components/ui/Tag'
 import {
   getCategoryBySlug,
   getCategoryPath,
+  getRelatedSheets,
   getSheetBySlug,
   getTechnologyBySlug,
   getTechnologyPath,
 } from '@/data/library'
 import { NotFoundPage } from './NotFoundPage'
 
-// Provisória: a visualização completa (código, dicas, relacionados) chega na Etapa 5.
 export function SheetPage() {
   const { techSlug = '', categorySlug = '', sheetSlug = '' } = useParams()
   const technology = getTechnologyBySlug(techSlug)
@@ -21,8 +25,10 @@ export function SheetPage() {
 
   if (!technology || !category || !sheet) return <NotFoundPage />
 
+  const relatedSheets = getRelatedSheets(sheet)
+
   return (
-    <>
+    <article className="max-w-3xl">
       <title>{`${sheet.title} · ${technology.name} · HasDevNotes`}</title>
 
       <Breadcrumbs
@@ -34,11 +40,63 @@ export function SheetPage() {
         ]}
       />
       <PageHeader title={sheet.title} description={sheet.description} accentColor={technology.color} />
-      <EmptyState
-        icon={<Construction className="size-6" />}
-        title="Em construção"
-        description="A visualização completa, com sintaxe, exemplos com destaque de código e dicas, chega na próxima etapa."
-      />
-    </>
+
+      <div className="space-y-10">
+        <SheetSection id="when" title="Quando usar">
+          <p className="rounded-r-lg border-l-2 border-accent bg-surface px-4 py-3 text-[15px] leading-relaxed">
+            <InlineCode text={sheet.whenToUse} />
+          </p>
+        </SheetSection>
+
+        <SheetSection id="syntax" title="Sintaxe">
+          <CodeBlock code={sheet.syntax} language={technology.language} />
+        </SheetSection>
+
+        {sheet.examples.length > 0 && (
+          <SheetSection id="examples" title={sheet.examples.length > 1 ? 'Exemplos' : 'Exemplo'}>
+            <div className="space-y-4">
+              {sheet.examples.map((example) => (
+                <CodeBlock
+                  key={example.code}
+                  code={example.code}
+                  // Cada exemplo pode ter linguagem própria; senão, usa a da tecnologia.
+                  language={example.language ?? technology.language}
+                  title={example.caption}
+                  output={example.output}
+                />
+              ))}
+            </div>
+          </SheetSection>
+        )}
+
+        {sheet.tips.length > 0 && (
+          <SheetSection id="tips" title="Dicas, cuidados e erros comuns">
+            <TipList tips={sheet.tips} />
+          </SheetSection>
+        )}
+
+        {sheet.tags.length > 0 && (
+          <SheetSection id="tags" title="Tags">
+            <div className="flex flex-wrap gap-2">
+              {sheet.tags.map((tag) => (
+                <Tag key={tag}>{tag}</Tag>
+              ))}
+            </div>
+          </SheetSection>
+        )}
+
+        {relatedSheets.length > 0 && (
+          <SheetSection id="related" title="Relacionados">
+            <ul className="grid gap-4 sm:grid-cols-2">
+              {relatedSheets.map((related) => (
+                <li key={related.id}>
+                  <SheetCard sheet={related} />
+                </li>
+              ))}
+            </ul>
+          </SheetSection>
+        )}
+      </div>
+    </article>
   )
 }

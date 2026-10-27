@@ -67,6 +67,10 @@ export interface Tip {
   text: string
 }
 
+/**
+ * Em `description`, `whenToUse` e no texto das dicas, trechos entre crases
+ * viram código na tela. Ex.: "Use `git pull` antes de começar."
+ */
 export interface CheatSheet {
   id: ID
   slug: Slug

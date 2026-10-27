@@ -45,7 +45,7 @@ export const sql: TechnologyContent = {
       technologyId: 'sql',
       categoryId: 'sql-queries',
       title: 'SELECT e WHERE',
-      description: 'SELECT escolhe as colunas a retornar; WHERE filtra quais linhas entram no resultado.',
+      description: '`SELECT` escolhe as colunas a retornar; `WHERE` filtra quais linhas entram no resultado.',
       whenToUse: 'Em praticamente toda leitura de dados: é a base de qualquer consulta.',
       syntax: code`
 SELECT coluna1, coluna2
@@ -72,12 +72,12 @@ WHERE titulo LIKE '%react%';
         },
       ],
       tips: [
-        { kind: 'warning', text: 'Evite SELECT * em produção: traga só as colunas necessárias.' },
+        { kind: 'warning', text: 'Evite `SELECT *` em produção: traga só as colunas necessárias.' },
         {
           kind: 'mistake',
-          text: 'Comparar com NULL usando = NULL. O correto é IS NULL ou IS NOT NULL.',
+          text: 'Comparar com NULL usando `= NULL`. O correto é `IS NULL` ou `IS NOT NULL`.',
         },
-        { kind: 'tip', text: 'IN (...) substitui vários OR: WHERE status IN (\'aberto\', \'pendente\').' },
+        { kind: 'tip', text: "`IN (...)` substitui vários `OR`: `WHERE status IN ('aberto', 'pendente')`." },
       ],
       tags: ['select', 'where', 'filtro'],
       relatedIds: ['sql-order-limit', 'sql-group-by'],
@@ -88,7 +88,7 @@ WHERE titulo LIKE '%react%';
       technologyId: 'sql',
       categoryId: 'sql-queries',
       title: 'ORDER BY e LIMIT',
-      description: 'ORDER BY ordena o resultado; LIMIT restringe quantas linhas são retornadas.',
+      description: '`ORDER BY` ordena o resultado; `LIMIT` restringe quantas linhas são retornadas.',
       whenToUse: 'Para rankings, listagens paginadas ou para buscar os registros mais recentes.',
       syntax: code`
 SELECT colunas
@@ -117,12 +117,12 @@ LIMIT 10 OFFSET 20;
         },
       ],
       tips: [
-        { kind: 'tip', text: 'ASC (crescente) é o padrão quando nada é informado.' },
+        { kind: 'tip', text: '`ASC` (crescente) é o padrão quando nada é informado.' },
         {
           kind: 'warning',
-          text: 'Sem ORDER BY a ordem das linhas não é garantida, e a paginação com LIMIT fica imprevisível.',
+          text: 'Sem `ORDER BY` a ordem das linhas não é garantida, e a paginação com `LIMIT` fica imprevisível.',
         },
-        { kind: 'tip', text: 'No SQL Server, o equivalente a LIMIT é SELECT TOP n.' },
+        { kind: 'tip', text: 'No SQL Server, o equivalente a `LIMIT` é `SELECT TOP n`.' },
       ],
       tags: ['order by', 'limit', 'paginação'],
       relatedIds: ['sql-select-where'],
@@ -151,11 +151,11 @@ INNER JOIN clientes AS c ON c.id = p.cliente_id;
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Escrever só JOIN é o mesmo que INNER JOIN.' },
-        { kind: 'tip', text: 'Use apelidos curtos (p, c) para deixar consultas com várias tabelas legíveis.' },
+        { kind: 'tip', text: 'Escrever só `JOIN` é o mesmo que `INNER JOIN`.' },
+        { kind: 'tip', text: 'Use apelidos curtos (`p`, `c`) para deixar consultas com várias tabelas legíveis.' },
         {
           kind: 'mistake',
-          text: 'Esquecer a condição ON: o resultado vira a combinação de todas as linhas com todas (produto cartesiano).',
+          text: 'Esquecer a condição `ON`: o resultado vira a combinação de todas as linhas com todas (produto cartesiano).',
         },
       ],
       tags: ['join', 'relacionamento'],
@@ -168,7 +168,7 @@ INNER JOIN clientes AS c ON c.id = p.cliente_id;
       categoryId: 'sql-joins',
       title: 'LEFT JOIN',
       description:
-        'Retorna todas as linhas da tabela da esquerda e as correspondências da direita. Quando não há correspondência, as colunas da direita vêm como NULL.',
+        'Retorna todas as linhas da tabela da esquerda e as correspondências da direita. Quando não há correspondência, as colunas da direita vêm como `NULL`.',
       whenToUse: 'Quando o registro principal deve aparecer mesmo sem dados relacionados. Ex.: clientes sem pedidos.',
       syntax: code`
 SELECT a.coluna, b.coluna
@@ -189,9 +189,9 @@ WHERE p.id IS NULL;
       tips: [
         {
           kind: 'mistake',
-          text: 'Filtrar a tabela da direita no WHERE (ex.: WHERE p.status = \'pago\'). Isso transforma o LEFT JOIN num INNER JOIN. Coloque o filtro no ON.',
+          text: "Filtrar a tabela da direita no `WHERE` (ex.: `WHERE p.status = 'pago'`). Isso transforma o `LEFT JOIN` num `INNER JOIN`. Coloque o filtro no `ON`.",
         },
-        { kind: 'tip', text: 'RIGHT JOIN é o espelho do LEFT JOIN. Na prática, quase sempre se usa LEFT.' },
+        { kind: 'tip', text: '`RIGHT JOIN` é o espelho do `LEFT JOIN`. Na prática, quase sempre se usa LEFT.' },
       ],
       tags: ['join', 'null', 'relacionamento'],
       relatedIds: ['sql-inner-join'],
@@ -202,7 +202,7 @@ WHERE p.id IS NULL;
       technologyId: 'sql',
       categoryId: 'sql-aggregation',
       title: 'GROUP BY e funções de agregação',
-      description: 'Agrupa linhas com o mesmo valor e calcula resumos por grupo: COUNT, SUM, AVG, MIN, MAX.',
+      description: 'Agrupa linhas com o mesmo valor e calcula resumos por grupo: `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`.',
       whenToUse: 'Para relatórios e métricas, como total de vendas por mês ou quantidade de notas por tecnologia.',
       syntax: code`
 SELECT coluna, COUNT(*), SUM(valor)
@@ -223,12 +223,12 @@ ORDER BY gasto DESC;
         },
       ],
       tips: [
-        { kind: 'tip', text: 'WHERE filtra linhas antes de agrupar; HAVING filtra os grupos depois.' },
+        { kind: 'tip', text: '`WHERE` filtra linhas antes de agrupar; `HAVING` filtra os grupos depois.' },
         {
           kind: 'mistake',
-          text: 'Selecionar uma coluna que não está no GROUP BY nem dentro de uma função de agregação. Isso gera erro na maioria dos bancos.',
+          text: 'Selecionar uma coluna que não está no `GROUP BY` nem dentro de uma função de agregação. Isso gera erro na maioria dos bancos.',
         },
-        { kind: 'tip', text: 'COUNT(coluna) ignora NULLs; COUNT(*) conta todas as linhas.' },
+        { kind: 'tip', text: '`COUNT(coluna)` ignora `NULL`s; `COUNT(*)` conta todas as linhas.' },
       ],
       tags: ['group by', 'agregação', 'relatório'],
       relatedIds: ['sql-select-where'],

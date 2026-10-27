@@ -79,14 +79,14 @@ console.log(nomes)
         },
       ],
       tips: [
-        { kind: 'tip', text: 'map não altera o array original: ele sempre retorna um array novo.' },
+        { kind: 'tip', text: '`map` não altera o array original: ele sempre retorna um array novo.' },
         {
           kind: 'mistake',
-          text: 'Esquecer o return ao usar chaves { } na arrow function. Sem ele, o novo array fica cheio de undefined.',
+          text: 'Esquecer o `return` ao usar chaves `{ }` na arrow function. Sem ele, o novo array fica cheio de `undefined`.',
         },
         {
           kind: 'warning',
-          text: 'Se você não vai usar o array retornado, use forEach. map serve para criar uma lista nova.',
+          text: 'Se você não vai usar o array retornado, use `forEach`. `map` serve para criar uma lista nova.',
         },
       ],
       tags: ['array', 'transformação', 'imutabilidade'],
@@ -131,14 +131,14 @@ console.log(pendentes.length)
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Se nenhum item passar no teste, o resultado é um array vazio [], nunca undefined.' },
+        { kind: 'tip', text: 'Se nenhum item passar no teste, o resultado é um array vazio `[]`, nunca `undefined`.' },
         {
           kind: 'tip',
-          text: 'Para encontrar só o primeiro item que satisfaz a condição, use find(): ele retorna o item, não um array.',
+          text: 'Para encontrar só o primeiro item que satisfaz a condição, use `find()`: ele retorna o item, não um array.',
         },
         {
           kind: 'mistake',
-          text: 'Retornar algo que não é booleano por engano. Valores como 0 e "" são tratados como false e descartam o item.',
+          text: 'Retornar algo que não é booleano por engano. Valores como `0` e `""` são tratados como `false` e descartam o item.',
         },
       ],
       tags: ['array', 'filtragem', 'imutabilidade'],
@@ -186,12 +186,12 @@ console.log(contagem)
       tips: [
         {
           kind: 'mistake',
-          text: 'Omitir o valor inicial. Em array vazio isso lança TypeError, e o primeiro item vira o acumulador.',
+          text: 'Omitir o valor inicial. Em array vazio isso lança `TypeError`, e o primeiro item vira o acumulador.',
         },
         { kind: 'mistake', text: 'Esquecer de retornar o acumulador dentro da função.' },
         {
           kind: 'tip',
-          text: 'Se o reduce ficou difícil de ler, um laço for...of ou uma combinação de filter + map costuma ser mais clara.',
+          text: 'Se o `reduce` ficou difícil de ler, um laço `for...of` ou uma combinação de `filter` + `map` costuma ser mais clara.',
         },
       ],
       tags: ['array', 'agregação', 'soma'],
@@ -205,7 +205,7 @@ console.log(contagem)
       title: 'async / await',
       description: 'Sintaxe para escrever código assíncrono (baseado em Promises) com cara de código sequencial.',
       whenToUse:
-        'Sempre que for esperar algo que demora: requisições HTTP, leitura de arquivos, timers. Deixa o código mais legível que encadear .then().',
+        'Sempre que for esperar algo que demora: requisições HTTP, leitura de arquivos, timers. Deixa o código mais legível que encadear `.then()`.',
       syntax: code`
 async function nomeDaFuncao() {
   try {
@@ -245,14 +245,14 @@ async function carregarTudo() {
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Uma função async sempre retorna uma Promise, mesmo que você retorne um valor comum.' },
+        { kind: 'tip', text: 'Uma função `async` sempre retorna uma Promise, mesmo que você retorne um valor comum.' },
         {
           kind: 'warning',
-          text: 'await em sequência executa uma coisa de cada vez. Para tarefas independentes, use Promise.all e ganhe tempo.',
+          text: '`await` em sequência executa uma coisa de cada vez. Para tarefas independentes, use `Promise.all` e ganhe tempo.',
         },
         {
           kind: 'mistake',
-          text: 'Esquecer o await: você recebe a Promise pendente em vez do valor.',
+          text: 'Esquecer o `await`: você recebe a Promise pendente em vez do valor.',
         },
       ],
       tags: ['async', 'promise', 'assíncrono'],
@@ -303,10 +303,10 @@ await fetch('https://api.exemplo.com/notes', {
       tips: [
         {
           kind: 'mistake',
-          text: 'Achar que fetch rejeita em erros 404 ou 500. Ele só rejeita em falha de rede: sempre confira resposta.ok.',
+          text: 'Achar que `fetch` rejeita em erros 404 ou 500. Ele só rejeita em falha de rede: sempre confira `resposta.ok`.',
         },
-        { kind: 'tip', text: 'resposta.json() também é assíncrono e precisa de await.' },
-        { kind: 'warning', text: 'Ao enviar JSON, não esqueça o header Content-Type e o JSON.stringify no body.' },
+        { kind: 'tip', text: '`resposta.json()` também é assíncrono e precisa de `await`.' },
+        { kind: 'warning', text: 'Ao enviar JSON, não esqueça o header `Content-Type` e o `JSON.stringify` no `body`.' },
       ],
       tags: ['http', 'api', 'requisição'],
       relatedIds: ['js-async-await'],
@@ -317,8 +317,8 @@ await fetch('https://api.exemplo.com/notes', {
       technologyId: 'javascript',
       categoryId: 'js-strings',
       title: 'Template literals',
-      description: 'Strings delimitadas por crases (`) que aceitam variáveis embutidas e múltiplas linhas.',
-      whenToUse: 'Sempre que precisar montar textos com valores dinâmicos, em vez de concatenar com +.',
+      description: 'Strings delimitadas por crases que aceitam variáveis embutidas e múltiplas linhas.',
+      whenToUse: 'Sempre que precisar montar textos com valores dinâmicos, em vez de concatenar com `+`.',
       syntax: code`
 const texto = \`Texto fixo \${expressao} mais texto\`
 `,
@@ -345,8 +345,8 @@ const html = \`
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Dentro de ${ } cabe qualquer expressão: contas, chamadas de função, ternários.' },
-        { kind: 'mistake', text: "Usar aspas simples ou duplas: '${nome}' é impresso literalmente, sem interpolar." },
+        { kind: 'tip', text: 'Dentro de `${ }` cabe qualquer expressão: contas, chamadas de função, ternários.' },
+        { kind: 'mistake', text: "Usar aspas simples ou duplas: `'${nome}'` é impresso literalmente, sem interpolar." },
       ],
       tags: ['string', 'interpolação'],
       relatedIds: [],

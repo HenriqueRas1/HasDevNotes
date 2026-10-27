@@ -22,6 +22,18 @@
   --success: #4ade80;
   --warning: #fbbf24;
   --danger: #f87171;
+
+  /* Cores do syntax highlighting (usadas em src/lib/highlight.ts) */
+  --syntax-comment: #6b7489;
+  --syntax-keyword: #c792ea;
+  --syntax-string: #9ece6a;
+  --syntax-function: #7aa2f7;
+  --syntax-number: #ff9e64;
+  --syntax-property: #7dcfff;
+  --syntax-tag: #f7768e;
+  --syntax-variable: #e0af68;
+  --syntax-operator: #89ddff;
+  --syntax-punctuation: #9aa3b8;
 }
 
 /*
@@ -48,6 +60,13 @@
 @layer base {
   body {
     @apply bg-bg font-sans text-text antialiased;
+  }
+
+  /* Mostra exatamente os caracteres digitados: sem ligaduras, "=>" não vira "⇒". */
+  code,
+  pre,
+  kbd {
+    font-variant-ligatures: none;
   }
 
   ::selection {
