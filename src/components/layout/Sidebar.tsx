@@ -9,6 +9,7 @@ import {
   getSheetsByTechnology,
   getTechnologies,
 } from '@/data/library'
+import { useFavoriteSheets } from '@/features/favorites/useFavoriteSheets'
 import { cn } from '@/lib/cn'
 import type { Technology } from '@/types'
 import { Logo } from './Logo'
@@ -21,6 +22,7 @@ interface SidebarProps {
 
 export function Sidebar({ open, onClose }: SidebarProps) {
   const stats = getLibraryStats()
+  const favoriteCount = useFavoriteSheets().length
 
   // O primeiro trecho da URL diz qual tecnologia está aberta: /javascript/arrays → "javascript".
   const { pathname } = useLocation()
@@ -60,7 +62,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             </SidebarLink>
           </li>
           <li>
-            <SidebarLink to="/favorites" icon={<Star className="size-4" />}>
+            <SidebarLink to="/favorites" icon={<Star className="size-4" />} badge={favoriteCount || undefined}>
               Favoritos
             </SidebarLink>
           </li>
@@ -90,10 +92,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 interface SidebarLinkProps {
   to: string
   icon: ReactNode
+  /** Número à direita (ex.: quantidade de favoritos). */
+  badge?: number
   children: ReactNode
 }
 
-function SidebarLink({ to, icon, children }: SidebarLinkProps) {
+function SidebarLink({ to, icon, badge, children }: SidebarLinkProps) {
   return (
     // NavLink sabe se a URL atual é a dele e passa `isActive` para o className.
     // `end` faz "/" ficar ativo só na página inicial, e não em toda URL que começa com "/".
@@ -108,7 +112,8 @@ function SidebarLink({ to, icon, children }: SidebarLinkProps) {
       }
     >
       {icon}
-      {children}
+      <span className="flex-1">{children}</span>
+      {badge !== undefined && <span className="font-mono text-xs text-muted">{badge}</span>}
     </NavLink>
   )
 }

@@ -7,6 +7,12 @@ import type { ID } from './content'
  * persistido (localStorage hoje, banco de dados no futuro).
  */
 
+export interface Favorite {
+  sheetId: ID
+  /** Data em formato ISO 8601. Permite ordenar do mais recente ao mais antigo. */
+  addedAt: string
+}
+
 export interface Note {
   id: string
   sheetId: ID

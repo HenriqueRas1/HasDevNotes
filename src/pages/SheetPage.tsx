@@ -15,6 +15,7 @@ import {
   getTechnologyBySlug,
   getTechnologyPath,
 } from '@/data/library'
+import { FavoriteButton } from '@/features/favorites/FavoriteButton'
 import { NotFoundPage } from './NotFoundPage'
 
 export function SheetPage() {
@@ -39,7 +40,12 @@ export function SheetPage() {
           { label: sheet.title },
         ]}
       />
-      <PageHeader title={sheet.title} description={sheet.description} accentColor={technology.color} />
+      <PageHeader
+        title={sheet.title}
+        description={sheet.description}
+        accentColor={technology.color}
+        actions={<FavoriteButton sheetId={sheet.id} variant="labeled" />}
+      />
 
       <div className="space-y-10">
         <SheetSection id="when" title="Quando usar">

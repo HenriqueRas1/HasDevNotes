@@ -1,6 +1,13 @@
+import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router'
+import { SheetCard } from '@/components/cards/SheetCard'
 import { TechnologyCard } from '@/components/cards/TechnologyCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { getLibraryStats, getTechnologies } from '@/data/library'
+import { useFavoriteSheets } from '@/features/favorites/useFavoriteSheets'
+
+/** Quantos favoritos aparecem na página inicial. */
+const RECENT_FAVORITES_LIMIT = 4
 
 export function HomePage() {
   const stats = getLibraryStats()
@@ -9,6 +16,8 @@ export function HomePage() {
     { label: 'Categorias', value: stats.categories },
     { label: 'Cheat sheets', value: stats.sheets },
   ]
+
+  const recentFavorites = useFavoriteSheets().slice(0, RECENT_FAVORITES_LIMIT)
 
   return (
     <>
@@ -27,6 +36,27 @@ export function HomePage() {
           </div>
         ))}
       </dl>
+
+      {recentFavorites.length > 0 && (
+        <section aria-labelledby="favorites-title" className="mb-10">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <h2 id="favorites-title" className="text-sm font-semibold uppercase tracking-wider text-muted">
+              Favoritos recentes
+            </h2>
+            <Link to="/favorites" className="flex items-center gap-1 text-sm text-accent hover:underline">
+              Ver todos
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
+          <ul className="grid gap-4 md:grid-cols-2">
+            {recentFavorites.map((sheet) => (
+              <li key={sheet.id}>
+                <SheetCard sheet={sheet} showContext />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section aria-labelledby="technologies-title">
         <h2 id="technologies-title" className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted">
