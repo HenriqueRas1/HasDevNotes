@@ -1,0 +1,56 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens de design do HasDevNotes.
+ *
+ * Cada cor tem um nome com significado ("surface", "muted"...) em vez de um
+ * valor fixo ("gray-900"). Os componentes usam esses nomes, por exemplo
+ * `bg-surface` ou `text-muted`. Para criar um tema claro no futuro, basta
+ * redefinir as variáveis abaixo, sem mexer em nenhum componente.
+ */
+:root {
+  color-scheme: dark;
+
+  --bg: #0b0e14;          /* fundo da página */
+  --surface: #11151d;     /* cards, sidebar */
+  --surface-2: #171c26;   /* hover, áreas de código */
+  --border: #232a36;
+  --text: #e6e9ef;
+  --muted: #8b94a7;       /* textos secundários */
+  --accent: #22d3ee;      /* destaque principal (ciano) */
+  --accent-2: #a78bfa;    /* destaque secundário (violeta) */
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --danger: #f87171;
+}
+
+/*
+ * @theme inline registra as variáveis no Tailwind e gera as classes
+ * utilitárias: --color-surface vira bg-surface, text-surface, border-surface...
+ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-bg font-sans text-text antialiased;
+  }
+
+  ::selection {
+    @apply bg-accent/30;
+  }
+}
