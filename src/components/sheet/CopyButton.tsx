@@ -3,7 +3,7 @@ import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import { cn } from '@/lib/cn'
 
 const feedback = {
-  idle: { label: 'Copiar', icon: Copy, className: 'text-muted hover:text-text' },
+  idle: { label: 'Copiar', icon: Copy, className: 'text-accent hover:text-accent-2' },
   copied: { label: 'Copiado!', icon: Check, className: 'text-success' },
   error: { label: 'Falhou', icon: X, className: 'text-danger' },
 }
@@ -17,7 +17,7 @@ export function CopyButton({ text }: { text: string }) {
       type="button"
       onClick={() => copy(text)}
       className={cn(
-        'flex items-center gap-1.5 rounded-md px-2 py-1 text-xs transition-colors hover:bg-surface',
+        'flex items-center gap-1.5 rounded-md px-2 py-1 font-mono text-xs transition-colors hover:bg-surface-2',
         className,
       )}
     >

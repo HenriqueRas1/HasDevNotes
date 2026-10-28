@@ -1,6 +1,7 @@
+/** Tag em formato de "chip" arredondado, como os filtros do design. */
 export function Tag({ children }: { children: string }) {
   return (
-    <span className="inline-flex items-center rounded-md border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[11px] text-muted">
+    <span className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] text-muted">
       #{children}
     </span>
   )

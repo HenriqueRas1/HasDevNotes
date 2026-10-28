@@ -1,6 +1,7 @@
-import { ArrowRight, CornerDownLeft, Search } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { Kbd } from '@/components/ui/Kbd'
 import { getCategoryById, getSheetPath, getTechnologyById } from '@/data/library'
 import { cn } from '@/lib/cn'
 import { toSearchTerms } from '@/lib/normalizeText'
@@ -43,7 +44,7 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
-      className="mx-auto mt-[10vh] w-[calc(100%-2rem)] max-w-xl overflow-hidden rounded-xl border border-border bg-surface p-0 text-text shadow-2xl backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+      className="mx-auto mt-[10vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-xl border border-border bg-surface p-0 text-text shadow-2xl backdrop:bg-black/60 backdrop:backdrop-blur-sm"
     >
       {/* Montado só quando aberto: ao fechar, a busca digitada é descartada. */}
       {open && <SearchPalette onClose={onClose} />}
@@ -93,8 +94,10 @@ function SearchPalette({ onClose }: { onClose: () => void }) {
 
   return (
     <div>
-      <div className="flex items-center gap-3 border-b border-border px-4">
-        <Search className="size-4 shrink-0 text-muted" />
+      <div className="flex items-center gap-3 border-b border-border px-5">
+        <span aria-hidden="true" className="font-mono text-lg font-medium text-accent">
+          ›
+        </span>
         <input
           value={query}
           onChange={(event) => {
@@ -111,11 +114,9 @@ function SearchPalette({ onClose }: { onClose: () => void }) {
           aria-controls="search-results"
           aria-activedescendant={activeId}
           aria-autocomplete="list"
-          className="h-14 flex-1 bg-transparent text-[15px] placeholder:text-muted focus:outline-none"
+          className="h-16 flex-1 bg-transparent text-lg placeholder:text-muted focus:outline-none"
         />
-        <kbd className="hidden rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[11px] text-muted sm:inline">
-          Esc
-        </kbd>
+        <Kbd className="hidden sm:inline">Esc</Kbd>
       </div>
 
       {terms.length === 0 ? (
@@ -140,36 +141,39 @@ function SearchPalette({ onClose }: { onClose: () => void }) {
                 onMouseMove={() => setActiveIndex(index)}
                 onClick={() => goTo(getSheetPath(sheet))}
                 className={cn(
-                  'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5',
-                  active && 'bg-surface-2',
+                  'flex cursor-pointer items-center gap-3 rounded-[9px] px-3.5 py-3',
+                  active && 'bg-surface-3',
                 )}
               >
                 <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: technology?.color }} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-mono text-sm">
+                  <p className={cn('truncate text-[15px]', active ? 'text-white' : 'text-text/85')}>
                     <MatchHighlight text={sheet.title} terms={terms} />
                   </p>
-                  <p className="truncate text-xs text-muted">
-                    {technology?.name} · {category?.name}
-                  </p>
+                  <p className="truncate text-xs text-muted">{category?.name}</p>
                 </div>
-                {active && <CornerDownLeft aria-hidden="true" className="size-4 shrink-0 text-muted" />}
+                {/* Tecnologia à direita, em mono, como no design. */}
+                <span className="shrink-0 font-mono text-xs text-muted">{technology?.name}</span>
               </li>
             )
           })}
         </ul>
       )}
 
-      {allResults.length > 0 && (
-        <button
-          type="button"
-          onClick={openAllResults}
-          className="flex w-full items-center justify-center gap-1.5 border-t border-border px-4 py-2.5 text-sm text-accent hover:bg-surface-2"
-        >
-          {allResults.length === 1 ? 'Ver resultado em cards' : `Ver os ${allResults.length} resultados em cards`}
-          <ArrowRight className="size-4" />
-        </button>
-      )}
+      {/* Rodapé com os atalhos, no estilo "↵ copy · ⌘E edit" do design. */}
+      <div className="flex items-center justify-between gap-3 border-t border-border px-5 py-3 font-mono text-xs text-muted">
+        <span className="hidden sm:inline">↑↓ navegar · ↵ abrir · esc fechar</span>
+        {allResults.length > 0 && (
+          <button
+            type="button"
+            onClick={openAllResults}
+            className="ml-auto flex items-center gap-1.5 text-accent hover:text-accent-2"
+          >
+            {allResults.length === 1 ? 'Ver em cards' : `Ver os ${allResults.length} em cards`}
+            <ArrowRight className="size-3.5" />
+          </button>
+        )}
+      </div>
     </div>
   )
 }

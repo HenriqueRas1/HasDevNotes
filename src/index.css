@@ -11,29 +11,36 @@
 :root {
   color-scheme: dark;
 
-  --bg: #0b0e14;          /* fundo da página */
-  --surface: #11151d;     /* cards, sidebar */
-  --surface-2: #171c26;   /* hover, áreas de código */
-  --border: #232a36;
-  --text: #e6e9ef;
-  --muted: #8b94a7;       /* textos secundários */
-  --accent: #22d3ee;      /* destaque principal (ciano) */
-  --accent-2: #a78bfa;    /* destaque secundário (violeta) */
-  --success: #4ade80;
-  --warning: #fbbf24;
-  --danger: #f87171;
+  /* Paleta baseada no design "Cheatsheet Palette" (docs/design/):
+     cinzas neutros levemente quentes e um único azul suave de destaque. */
+  --bg: #121316;          /* fundo da página */
+  --surface: #1a1b1f;     /* cards, sidebar */
+  --surface-2: #1d1f26;   /* hover, áreas de código */
+  --surface-3: #262a36;   /* item selecionado (ex.: resultado ativo da busca) */
+  --field: #1c1d21;       /* campo de busca da paleta */
+  --border: #2c2d33;
+  --border-subtle: #26272c; /* borda do painel de detalhe */
+  --text: #e9e7e1;
+  --subtle: #a3a19b;      /* descrições (entre text e muted) */
+  --muted: #8b8a85;       /* textos secundários (contraste ≥ 4,5:1 sobre surface-2) */  --accent: #7d9bf0;      /* destaque principal (azul suave) */
+  --accent-2: #a9bdf5;    /* destaque secundário (azul claro, hover de links) */
+  --success: #9fd18a;
+  --warning: #e5c07b;
+  --danger: #e88b84;
 
-  /* Cores do syntax highlighting (usadas em src/lib/highlight.ts) */
-  --syntax-comment: #7f88a0; /* contraste ≥ 4,5:1 sobre surface-2 (WCAG AA) */
-  --syntax-keyword: #c792ea;
-  --syntax-string: #9ece6a;
-  --syntax-function: #7aa2f7;
-  --syntax-number: #ff9e64;
-  --syntax-property: #7dcfff;
-  --syntax-tag: #f7768e;
-  --syntax-variable: #e0af68;
-  --syntax-operator: #89ddff;
-  --syntax-punctuation: #9aa3b8;
+  /* Cores do syntax highlighting (usadas em src/lib/highlight.ts).
+     Tons mais suaves para combinar com a paleta; strings usam o verde
+     do design (#cfe0a8). */
+  --syntax-comment: #8b8a85; /* contraste ≥ 4,5:1 sobre surface-2 (WCAG AA) */
+  --syntax-keyword: #c4a7e7;
+  --syntax-string: #cfe0a8;
+  --syntax-function: #7d9bf0;
+  --syntax-number: #e6a872;
+  --syntax-property: #9cc4e4;
+  --syntax-tag: #e88b9a;
+  --syntax-variable: #e5c07b;
+  --syntax-operator: #a3a19b;
+  --syntax-punctuation: #a3a19b;
 }
 
 /*
@@ -44,16 +51,19 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-field: var(--field);
   --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
   --color-text: var(--text);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
+  --color-subtle: var(--subtle);
+  --color-muted: var(--muted);  --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
 
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
 }
 

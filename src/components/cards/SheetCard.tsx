@@ -35,7 +35,7 @@ export function SheetCard({ sheet, showContext = false }: SheetCardProps) {
       )}
 
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-mono text-[15px] font-medium transition-colors group-hover:text-accent">
+        <h3 className="text-base font-medium transition-colors group-hover:text-accent">
           <Link to={getSheetPath(sheet)} className="outline-none after:absolute after:inset-0 after:rounded-xl">
             {sheet.title}
           </Link>

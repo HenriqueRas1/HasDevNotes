@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--
+  Referência visual exportada do Claude Design (projeto "Programming cheatsheet UI mockups",
+  arquivo "Cheatsheet Palette.dc.html"). Não roda sozinho: depende do support.js do Claude Design.
+  Serve só como fonte de cores, fontes, espaçamentos e layout.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>html{color-scheme:dark}body{margin:0;background:#121316;font-family:'IBM Plex Sans',system-ui,sans-serif}a{color:#7d9bf0}a:hover{color:#a9bdf5}input::placeholder{color:inherit;opacity:.45}</style></helmet>
+<div style="min-height:100vh;background:#121316;color:#e9e7e1;display:flex;flex-direction:column;align-items:center;padding:72px 24px;box-sizing:border-box">
+  <div style="width:100%;max-width:1074px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;align-items:center;gap:14px;background:#1c1d21;border:1px solid #2c2d33;border-radius:12px;padding:0 24px">
+      <span style="font:500 18px 'JetBrains Mono',monospace;color:#7d9bf0">›</span>
+      <input ref="{{ inputRef }}" value="{{ q }}" onChange="{{ onQ }}" onKeyDown="{{ onKey }}" placeholder="What do you need? e.g. undo commit" style="flex:1;background:transparent;border:0;outline:none;color:#e9e7e1;font:22px 'IBM Plex Sans',sans-serif;padding:24px 0"></input>
+      <span style="font:13px 'JetBrains Mono',monospace;color:#8b8a85;border:1px solid #34353b;border-radius:4px;padding:3px 7px">⌘K</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="7">
+        <div onClick="{{ c.pick }}" style="font:15px 'JetBrains Mono',monospace;padding:6px 13px;border-radius:20px;cursor:pointer;border:1px solid {{ c.bd }};color:{{ c.fg }}" style-hover="color:#e9e7e1">{{ c.name }}</div>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,425px) minmax(0,1fr);gap:18px;height:550px">
+      <div style="overflow:auto;display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{ list }}" as="s" hint-placeholder-count="10">
+          <div onClick="{{ s.pick }}" style="padding:13px 15px;border-radius:9px;cursor:pointer;background:{{ s.bg }};display:flex;justify-content:space-between;gap:12px;align-items:center;flex:none" style-hover="background:#1d1f26">
+            <span style="font-size:17px;color:{{ s.fg }}">{{ s.title }}</span>
+            <span style="font:13px 'JetBrains Mono',monospace;color:#8b8a85;flex:none">{{ s.tool }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}"><div style="padding:15px;font-size:15px;color:#8b8a85">Nothing yet. Press ⌘N to save one.</div></sc-if>
+      </div>
+      <div style="background:#1a1b1f;border:1px solid #26272c;border-radius:12px;padding:26px;display:flex;flex-direction:column;gap:16px;min-width:0">
+        <div style="font-size:22px;font-weight:600">{{ cur.title }}</div>
+        <div style="font-size:15px;color:#a3a19b;line-height:1.5">{{ cur.note }}</div>
+        <pre style="margin:0;flex:1;font:17px/1.7 'JetBrains Mono',monospace;color:#cfe0a8;white-space:pre-wrap;overflow:auto">{{ cur.code }}</pre>
+        <div style="display:flex;justify-content:space-between;align-items:center;font:15px 'JetBrains Mono',monospace;color:#8b8a85;border-top:1px solid #26272c;padding-top:16px">
+          <span>↵ copy · ⌘E edit · ⌘P pin</span>
+          <span onClick="{{ copyCur }}" style="cursor:pointer;color:{{ cur.cfg }}">{{ cur.clabel }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DATA = [
+  {id:1,tool:'Git',title:'Undo last commit, keep changes',code:'git reset --soft HEAD~1',note:'Moves HEAD back one commit. Your changes stay staged.'},
+  {id:2,tool:'Git',title:'Rename current branch',code:'git branch -m new-name',note:'Renames the branch you are on.'},
+  {id:3,tool:'Git',title:'Stash incl. untracked',code:'git stash -u\ngit stash pop',note:'Shelve work in progress, then bring it back.'},
+  {id:4,tool:'Git',title:'Pretty log graph',code:'git log --oneline --graph --all',note:'Compact history of every branch.'},
+  {id:5,tool:'Bash',title:'Find files by name',code:'find . -name "*.log" -type f',note:'Recursive search from the current folder.'},
+  {id:6,tool:'Bash',title:'Kill process on port',code:'lsof -ti :3000 | xargs kill -9',note:'Frees a port held by a stuck dev server.'},
+  {id:7,tool:'Bash',title:'Search text in files',code:'grep -rn "TODO" ./src',note:'Recursive, with line numbers.'},
+  {id:8,tool:'Python',title:'Virtual env',code:'python -m venv .venv\nsource .venv/bin/activate',note:'Create and activate a local environment.'},
+  {id:9,tool:'Python',title:'Dict comprehension',code:'{k: v for k, v in items if v}',note:'Build a dict, skipping falsy values.'},
+  {id:10,tool:'Python',title:'Read file lines',code:'with open(path) as f:\n    lines = f.read().splitlines()',note:'Closes the file automatically.'},
+  {id:11,tool:'JavaScript',title:'Debounce',code:'const debounce = (fn, ms) => {\n  let t;\n  return (...a) => {\n    clearTimeout(t);\n    t = setTimeout(() => fn(...a), ms);\n  };\n};',note:'Delay a call until input settles.'},
+  {id:12,tool:'JavaScript',title:'Remove duplicates',code:'[...new Set(arr)]',note:'Unique values, original order.'},
+  {id:13,tool:'JavaScript',title:'Optional chaining + default',code:'user?.address?.city ?? "—"',note:'Safe nested access with a fallback.'},
+  {id:14,tool:'Docker',title:'Shell into container',code:'docker exec -it <name> sh',note:'Interactive shell in a running container.'},
+  {id:15,tool:'Docker',title:'Clean everything unused',code:'docker system prune -a',note:'Removes stopped containers, unused images and networks.'},
+  {id:16,tool:'Vim',title:'Save and quit',code:':wq',note:'Write the file and exit.'},
+  {id:17,tool:'Vim',title:'Replace all in file',code:':%s/old/new/g',note:'Add c at the end to confirm each.'},
+];
+const TOOLS = ['All', ...new Set(DATA.map(d => d.tool))];
+const match = (d, q) => !q || (d.title + ' ' + d.code + ' ' + d.tool + ' ' + d.note).toLowerCase().includes(q.toLowerCase());
+
+class Component extends DCLogic {
+  state = { q: '', tool: 'All', idx: 3, copied: false };
+  inputRef = React.createRef();
+  componentDidMount() {
+    this._k = e => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); this.inputRef.current && this.inputRef.current.focus(); } };
+    window.addEventListener('keydown', this._k);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._k); }
+  copy(text) {
+    try { navigator.clipboard.writeText(text); } catch (e) {}
+    this.setState({ copied: true });
+    clearTimeout(this._t); this._t = setTimeout(() => this.setState({ copied: false }), 1200);
+  }
+  renderVals() {
+    const s = this.state;
+    const list = DATA.filter(d => (s.tool === 'All' || d.tool === s.tool) && match(d, s.q));
+    const i = Math.min(s.idx, Math.max(0, list.length - 1));
+    const cur = list[i] || { title: '', note: '', code: '' };
+    return {
+      q: s.q, empty: !list.length, inputRef: this.inputRef,
+      onQ: e => this.setState({ q: e.target.value, idx: 0 }),
+      onKey: e => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); this.setState({ idx: Math.min(i + 1, list.length - 1) }); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); this.setState({ idx: Math.max(i - 1, 0) }); }
+        if (e.key === 'Enter' && list.length) this.copy(cur.code);
+      },
+      chips: TOOLS.map(t => ({ name: t, bd: s.tool === t ? '#7d9bf0' : '#2c2d33', fg: s.tool === t ? '#e9e7e1' : '#8b8a85', pick: () => this.setState({ tool: t, idx: 0 }) })),
+      list: list.map((d, j) => ({ ...d, bg: j === i ? '#262a36' : 'transparent', fg: j === i ? '#fff' : '#c9c7c0', pick: () => this.setState({ idx: j }) })),
+      cur: { ...cur, clabel: s.copied ? 'Copied ✓' : 'Copy ↵', cfg: s.copied ? '#9fd18a' : '#7d9bf0' },
+      copyCur: () => list.length && this.copy(cur.code),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,4 +1,5 @@
-import { Menu, Search } from 'lucide-react'
+import { Menu } from 'lucide-react'
+import { Kbd } from '@/components/ui/Kbd'
 
 /** No Mac o atalho usa a tecla Command (⌘) em vez de Ctrl. */
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.userAgent)
@@ -27,13 +28,14 @@ export function Header({ sidebarOpen, onOpenSidebar, onOpenSearch }: HeaderProps
         type="button"
         onClick={onOpenSearch}
         aria-keyshortcuts={isMac ? 'Meta+K' : 'Control+K'}
-        className="flex h-9 w-full max-w-md items-center gap-2 rounded-lg border border-border bg-surface px-3 text-sm text-muted transition-colors hover:border-muted/50 hover:text-text"
+        className="flex h-10 w-full max-w-md items-center gap-3 rounded-xl border border-border bg-surface px-4 text-sm text-muted transition-colors hover:border-muted/50 hover:text-text"
       >
-        <Search className="size-4 shrink-0" />
+        {/* O "›" lembra um prompt de terminal, como no design. */}
+        <span aria-hidden="true" className="font-mono text-base font-medium text-accent">
+          ›
+        </span>
         <span className="flex-1 text-left">Buscar cheat sheets…</span>
-        <kbd className="hidden rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[11px] sm:inline">
-          {isMac ? '⌘ K' : 'Ctrl K'}
-        </kbd>
+        <Kbd className="hidden sm:inline">{isMac ? '⌘K' : 'Ctrl K'}</Kbd>
       </button>
     </header>
   )
