@@ -90,6 +90,15 @@ export interface CheatSheet {
   relatedIds: ID[]
 }
 
+/**
+ * Uma categoria com seus Cheat Sheets. Tecnologias grandes ficam numa pasta,
+ * com um arquivo por categoria. A ordem vem da posição no index da pasta.
+ */
+export interface CategoryContent {
+  category: Omit<Category, 'order'>
+  sheets: CheatSheet[]
+}
+
 /** Formato de cada arquivo em src/data/content: uma tecnologia completa. */
 export interface TechnologyContent {
   technology: Technology

@@ -17,12 +17,10 @@
   --surface: #1a1b1f;     /* cards, sidebar */
   --surface-2: #1d1f26;   /* hover, áreas de código */
   --surface-3: #262a36;   /* item selecionado (ex.: resultado ativo da busca) */
-  --field: #1c1d21;       /* campo de busca da paleta */
   --border: #2c2d33;
-  --border-subtle: #26272c; /* borda do painel de detalhe */
   --text: #e9e7e1;
-  --subtle: #a3a19b;      /* descrições (entre text e muted) */
-  --muted: #8b8a85;       /* textos secundários (contraste ≥ 4,5:1 sobre surface-2) */  --accent: #7d9bf0;      /* destaque principal (azul suave) */
+  --muted: #8b8a85;       /* textos secundários (contraste ≥ 4,5:1 sobre surface-2) */
+  --accent: #7d9bf0;      /* destaque principal (azul suave) */
   --accent-2: #a9bdf5;    /* destaque secundário (azul claro, hover de links) */
   --success: #9fd18a;
   --warning: #e5c07b;
@@ -52,12 +50,10 @@
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
-  --color-field: var(--field);
   --color-border: var(--border);
-  --color-border-subtle: var(--border-subtle);
   --color-text: var(--text);
-  --color-subtle: var(--subtle);
-  --color-muted: var(--muted);  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
   --color-success: var(--success);
   --color-warning: var(--warning);

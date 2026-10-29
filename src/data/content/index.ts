@@ -1,14 +1,8 @@
 import type { TechnologyContent } from '@/types'
-import { css } from './css'
-import { dom } from './dom'
-import { git } from './git'
 import { javascript } from './javascript'
-import { react } from './react'
-import { sql } from './sql'
-import { typescript } from './typescript'
 
 /**
  * Lista de todas as tecnologias da biblioteca, na ordem da sidebar.
- * Para adicionar uma tecnologia: crie o arquivo nesta pasta e inclua aqui.
+ * Para adicionar uma tecnologia: crie o arquivo (ou a pasta) aqui e inclua na lista.
  */
-export const contentModules: TechnologyContent[] = [javascript, dom, typescript, react, css, git, sql]
+export const contentModules: TechnologyContent[] = [javascript]
