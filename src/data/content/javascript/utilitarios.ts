@@ -20,18 +20,21 @@ export const utilitarios: CategoryContent = {
       description: 'Expressões regulares descrevem padrões de texto para testar, extrair e substituir trechos.',
       whenToUse: 'Para validar formatos simples (CEP, data), extrair números de um texto ou substituir padrões.',
       syntax: code`
-/padrao/flags
+const re = /\\d+/g         // /padrão/flags
 re.test(texto)            // true/false
 texto.match(re)           // primeira ocorrência (ou todas, com g)
-texto.matchAll(re)        // iterador com todas (exige g)
-texto.replace(re, 'novo')
+texto.matchAll(re)        // todas, com detalhes (exige g)
+texto.replace(re, 'novo') // troca o que combinar
 re.exec(texto)            // detalhes + grupos
 
-\\d dígito   \\w letra/dígito/_   \\s espaço   . qualquer caractere
-[a-z] faixa   [^0-9] negação   ^ início   $ fim
-* 0+   + 1+   ? 0 ou 1   {n,m} entre n e m
-(grupo)   (?:sem captura)   (?<nome>nomeado)   a|b
-flags: g global, i ignora maiúsculas, m multilinha, u unicode, s dotAll
+// Símbolos
+// \\d dígito   \\w letra/dígito/_   \\s espaço   . qualquer caractere
+// [a-z] faixa   [^0-9] qualquer coisa menos 0-9   ^ início   $ fim
+// * zero ou mais   + um ou mais   ? opcional   {2,4} de 2 a 4 vezes
+// (grupo)   (?<nome>grupo com nome)   a|b  a ou b
+
+// Flags
+// g todas as ocorrências   i ignora maiúsculas   u unicode (acentos)
 `,
       examples: [
         {
@@ -60,10 +63,6 @@ console.log('Maya Silva'.replace(/(\\w+) (\\w+)/, '$2, $1'))
         {
           kind: 'warning',
           text: '`\\w` só cobre letras ASCII: não reconhece "é" nem "ç". Para acentos, use `\\p{L}` com a flag `u`.',
-        },
-        {
-          kind: 'warning',
-          text: '`test` e `exec` com a flag `g` guardam a posição em `lastIndex`: reutilizar a mesma regex dá resultados alternados.',
         },
         {
           kind: 'mistake',

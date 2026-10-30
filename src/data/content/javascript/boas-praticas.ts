@@ -82,10 +82,12 @@ console.log(f())
       syntax: code`
 console.log({ variavel })        // mostra nome e valor
 console.table(lista)             // lista de objetos em tabela
-console.error / console.warn
-console.trace('aqui')            // pilha de chamadas
+console.error('falhou')          // destaque de erro (vermelho)
+console.warn('cuidado')          // destaque de aviso (amarelo)
+console.trace('aqui')            // mostra quais funções chamaram até aqui
 console.assert(condicao, 'msg')  // loga só se for falso
-console.time('x') / console.timeEnd('x')
+console.time('x')                // inicia um cronômetro
+console.timeEnd('x')             // mostra o tempo desde o time('x')
 debugger                         // pausa (com DevTools aberto)
 `,
       examples: [
@@ -95,18 +97,18 @@ debugger                         // pausa (com DevTools aberto)
 const itens = [{ id: 1, preco: 12 }, { id: 2, preco: 30 }]
 const total = itens.reduce((s, i) => s + i.preco, 0)
 
-console.log({ total })
-console.assert(itens.length > 0, 'Lista vazia')
+console.log({ total })                          // { total: 42 }
+console.assert(itens.length > 0, 'Lista vazia') // não mostra nada: a condição é verdadeira
 console.time('processo')
 // ... trabalho a medir ...
-console.timeEnd('processo')
+console.timeEnd('processo')                     // ex.: processo: 0.05 ms
 `,
         },
         {
           caption: 'Foto do valor no momento do log',
           code: code`
 const user = { nome: 'Maya' }
-console.log(structuredClone(user)) // não muda se user mudar depois
+console.log(structuredClone(user)) // { nome: 'Maya' }, mesmo depois da mudança abaixo
 user.nome = 'Leo'
 `,
         },
@@ -140,17 +142,20 @@ user.nome = 'Leo'
       categoryId: 'js-boas-praticas',
       title: 'Práticas modernas úteis',
       description:
-        'Hábitos que deixam o código claro e confiável: nomes descritivos, funções pequenas, imutabilidade e limpeza de recursos.',
+        'Hábitos que deixam o código claro e confiável: nomes descritivos, funções pequenas, criar cópias em vez de alterar dados (imutabilidade) e limpar o que não serve mais.',
       whenToUse: 'Em todo código novo e em revisões.',
       syntax: code`
-// clareza
-const por padrão · nomes descritivos · funções pequenas
-retorno antecipado · === sempre · módulos
+// Clareza
+// - const por padrão, let só quando precisar reatribuir
+// - nomes descritivos: precoTotal, não pt
+// - funções pequenas, com uma tarefa cada
+// - retorno antecipado em vez de if aninhado
+// - === sempre, nunca ==
 
-// confiabilidade
-validar entradas e respostas da API
-tratar erros na borda (onde dá para avisar o usuário)
-remover listeners e timers que não servem mais
+// Confiabilidade
+// - validar entradas do usuário e respostas da API
+// - tratar erros onde dá para avisar o usuário
+// - remover listeners e timers que não servem mais
 `,
       examples: [
         {

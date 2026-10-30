@@ -23,13 +23,14 @@ export const arrays: CategoryContent = {
 lista.length
 lista[0]               // primeiro
 lista.at(-1)           // último
-lista.push(item)       // adiciona no fim     (muta)
-lista.pop()            // remove do fim       (muta)
-lista.unshift(item)    // adiciona no início  (muta)
-lista.shift()          // remove do início    (muta)
-lista.splice(i, qtd, ...novos)  // remove/insere no meio (muta)
-lista.slice(inicio, fim)        // copia um trecho (não muta)
-lista.includes(x) / lista.indexOf(x)
+lista.push(item)       // adiciona no fim     (altera a lista)
+lista.pop()            // remove do fim       (altera a lista)
+lista.unshift(item)    // adiciona no início  (altera a lista)
+lista.shift()          // remove do início    (altera a lista)
+lista.splice(i, qtd, ...novos)  // remove/insere no meio (altera a lista)
+lista.slice(inicio, fim)        // copia um trecho (não altera)
+lista.includes(x)      // true se x estiver na lista
+lista.indexOf(x)       // posição de x, ou -1
 `,
       examples: [
         {
@@ -58,7 +59,10 @@ console.log(nums.includes(99), nums.indexOf(99))
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Mutam o array: `push`, `pop`, `shift`, `unshift` e `splice`. Não muta: `slice`.' },
+        {
+          kind: 'tip',
+          text: 'Alteram o array original (isso se chama mutação): `push`, `pop`, `shift`, `unshift` e `splice`. O `slice` não altera: devolve uma cópia.',
+        },
         { kind: 'tip', text: '`push` e `unshift` devolvem o novo tamanho; `pop` e `shift` devolvem o item removido.' },
         { kind: 'tip', text: 'Índices começam em zero. `indexOf` devolve `-1` quando não encontra.' },
         {
@@ -74,9 +78,9 @@ console.log(nums.includes(99), nums.indexOf(99))
       slug: 'transformar-e-buscar',
       technologyId: 'javascript',
       categoryId: 'js-arrays',
-      title: 'map, filter, find, some e every',
+      title: 'Transformar e buscar (map, filter, find…)',
       description:
-        'Métodos que recebem um callback para transformar, filtrar ou buscar itens sem escrever loops manuais.',
+        'Métodos que recebem um callback (uma função que roda para cada item) para transformar, filtrar ou buscar sem escrever loops.',
       whenToUse:
         'Para transformar todos os itens (`map`), ficar só com alguns (`filter`), achar um (`find`) ou testar a lista (`some`/`every`).',
       syntax: code`
@@ -120,7 +124,7 @@ console.log(pendentes)
         { kind: 'tip', text: '`find` devolve o item; `filter` devolve um array, mesmo com um único item.' },
         {
           kind: 'warning',
-          text: 'Os métodos não mudam o array, mas o callback pode alterar os objetos dentro dele. Para mudar um item, devolva uma cópia: `{ ...t, feita: true }`.',
+          text: 'Os métodos não mudam o array, mas o callback pode alterar os objetos dentro dele. Para mudar um item, devolva uma cópia: `{ ...t, feita: true }` (veja Destructuring, spread e rest).',
         },
         {
           kind: 'mistake',
@@ -139,7 +143,7 @@ console.log(pendentes)
       slug: 'reduce',
       technologyId: 'javascript',
       categoryId: 'js-arrays',
-      title: 'Array.reduce()',
+      title: 'Acumular valores (reduce)',
       description: 'Percorre o array acumulando um único resultado: um número, um objeto, outro array…',
       whenToUse:
         'Para somar valores, contar ocorrências ou agrupar itens. Se `map` ou `filter` resolverem, prefira-os: são mais legíveis.',
@@ -188,20 +192,20 @@ console.log(contagem)
       slug: 'sem-mutacao',
       technologyId: 'javascript',
       categoryId: 'js-arrays',
-      title: 'Ordenar e copiar sem mutação',
+      title: 'Ordenar e copiar sem alterar o original',
       description:
-        'Versões modernas que devolvem um array novo (`toSorted`, `toReversed`, `toSpliced`, `with`) e utilitários como `flat` e `Array.from`.',
+        'Versões que devolvem um array novo em vez de alterar o original (`toSorted`, `toReversed`, `toSpliced`, `with`), e utilitários como `flat` e `Array.from`.',
       whenToUse:
         'Quando a lista original não pode mudar, como no estado do React, e para ordenar números e textos corretamente.',
       syntax: code`
-lista.toSorted(comparador)   // sort sem mutar
-lista.toReversed()           // reverse sem mutar
-lista.toSpliced(i, qtd, x)   // splice sem mutar
+lista.toSorted(comparador)   // como sort, mas devolve cópia
+lista.toReversed()           // como reverse, mas devolve cópia
+lista.toSpliced(i, qtd, x)   // como splice, mas devolve cópia
 lista.with(i, valor)         // cópia com uma posição trocada
 lista.flat()                 // achata um nível
 lista.flatMap(fn)            // map + flat
 lista.findLast(fn)           // busca do fim para o início
-Array.from({ length: n }, (_, i) => i)
+Array.from({ length: n }, (_, i) => i)  // [0, 1, ..., n-1]
 
 // comparadores
 (a, b) => a - b                        // números, crescente
@@ -232,7 +236,10 @@ console.log(['Érico', 'ana', 'Bia'].toSorted((a, b) => a.localeCompare(b, 'pt-B
       ],
       tips: [
         { kind: 'tip', text: 'Alternativa que funciona em qualquer ambiente: `[...lista].sort(comparador)`.' },
-        { kind: 'tip', text: 'As cópias são rasas: os objetos dentro do array continuam compartilhados.' },
+        {
+          kind: 'tip',
+          text: 'O array é novo, mas os objetos dentro dele são os mesmos (cópia rasa). Veja Referências e cópias.',
+        },
         {
           kind: 'mistake',
           text: '`[10, 2, 1].sort()` ordena como texto e devolve `[1, 10, 2]`. Para números, passe `(a, b) => a - b`.',

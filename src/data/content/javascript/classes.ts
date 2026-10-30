@@ -18,7 +18,7 @@ export const classes: CategoryContent = {
       categoryId: 'js-classes',
       title: 'Classes e encapsulamento',
       description:
-        'Classes criam objetos com o mesmo formato. Têm `constructor`, métodos, getters, membros `static` e campos privados com `#`.',
+        'Uma classe é um molde para criar objetos com o mesmo formato. Tem `constructor`, métodos, getters, membros `static` e campos privados com `#`.',
       whenToUse: 'Para modelar entidades com estado e regras próprias, como uma conta, um carrinho ou um jogador.',
       syntax: code`
 class Nome {
@@ -93,7 +93,7 @@ console.log(new Cachorro('Rex').falar())
       tips: [
         { kind: 'tip', text: 'Campos `#privados` só podem ser lidos dentro da própria classe: `conta.#saldo` fora dela é erro de sintaxe.' },
         { kind: 'tip', text: 'Getters são acessados sem parênteses: `conta.saldo`, não `conta.saldo()`.' },
-        { kind: 'warning', text: 'O código dentro de classes roda sempre em modo estrito.' },
+        { kind: 'warning', text: 'Sem `new`, a classe não funciona: `Conta("Maya")` lança `TypeError`. Use `new Conta("Maya")`.' },
         {
           kind: 'mistake',
           text: 'Usar `this` no constructor da classe filha antes de chamar `super(...)`: lança `ReferenceError`.',
@@ -109,7 +109,7 @@ console.log(new Cachorro('Rex').falar())
       categoryId: 'js-classes',
       title: 'Protótipos e identidade',
       description:
-        'Todo objeto tem um protótipo. Quando uma propriedade não existe no objeto, o JavaScript procura na cadeia de protótipos.',
+        'Todo objeto tem um protótipo: outro objeto de onde ele herda propriedades e métodos. Se algo não existe no objeto, o JavaScript procura no protótipo, depois no protótipo dele, e assim por diante (cadeia de protótipos).',
       whenToUse:
         'Para entender de onde vêm métodos como `map` e `toString`, como as classes funcionam por baixo e como testar tipos.',
       syntax: code`
@@ -153,8 +153,11 @@ console.log(p instanceof Pessoa, Array.isArray([]))
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Métodos de classe ficam no `prototype` e são compartilhados por todas as instâncias.' },
-        { kind: 'tip', text: 'Para testar arrays, use `Array.isArray`: o `instanceof` pode falhar com arrays de outra janela ou iframe.' },
+        {
+          kind: 'tip',
+          text: 'Métodos de classe ficam no `prototype` e são compartilhados por todos os objetos criados com ela (as instâncias).',
+        },
+        { kind: 'tip', text: 'Para testar se algo é array, prefira `Array.isArray(valor)` a `instanceof Array`.' },
         { kind: 'warning', text: 'Prefira `Object.getPrototypeOf` a `__proto__`, que é uma forma antiga.' },
         { kind: 'mistake', text: 'Alterar protótipos nativos como `Array.prototype`: afeta todo o código da página, inclusive bibliotecas.' },
       ],

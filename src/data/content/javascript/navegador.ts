@@ -22,10 +22,13 @@ export const navegador: CategoryContent = {
       whenToUse: 'Para deixar a página interativa sem framework: mostrar mensagens, montar listas e reagir a cliques.',
       syntax: code`
 document.querySelector('#id')          // primeiro elemento ou null
-document.querySelectorAll('.classe')   // NodeList estática
+document.querySelectorAll('.classe')   // lista com todos (NodeList)
 
 el.textContent = 'texto'
-el.classList.add('x') / .remove('x') / .toggle('x') / .contains('x')
+el.classList.add('x')                  // adiciona a classe
+el.classList.remove('x')               // remove
+el.classList.toggle('x')               // adiciona se não tem, remove se tem
+el.classList.contains('x')             // true/false
 el.dataset.id = '42'                   // atributo data-id
 el.setAttribute('aria-label', 'Fechar')
 
@@ -50,11 +53,13 @@ botao?.addEventListener('click', () => {
   botao.textContent = 'Salvo'
   botao.classList.add('salvo')
 })
+// ao clicar: <button id="salvar" class="salvo">Salvo</button>
 
 const li = document.createElement('li')
 li.textContent = 'Novo item'
 li.dataset.id = '42'
 document.querySelector('#lista')?.append(li)
+// resultado: <ul id="lista"><li data-id="42">Novo item</li></ul>
 `,
         },
       ],
@@ -63,7 +68,7 @@ document.querySelector('#lista')?.append(li)
         { kind: 'tip', text: 'Rode o script depois do HTML existir: use `defer` ou `type="module"` na tag `<script>`.' },
         {
           kind: 'warning',
-          text: 'Use `textContent` para texto vindo do usuário. `innerHTML` interpreta HTML e abre brecha para XSS.',
+          text: 'Use `textContent` para texto vindo do usuário. `innerHTML` interpreta HTML e permite que alguém injete um script na página (ataque chamado XSS).',
         },
         { kind: 'mistake', text: 'Não tratar o `null` de `querySelector` quando o elemento não existe: `null.textContent` lança `TypeError`.' },
       ],
@@ -77,7 +82,7 @@ document.querySelector('#lista')?.append(li)
       categoryId: 'js-navegador',
       title: 'Eventos e delegação',
       description:
-        '`addEventListener` reage a cliques, teclas e envios. Na delegação, um único listener no elemento pai atende todos os filhos.',
+        '`addEventListener` registra um listener: uma função que roda quando acontece um clique, uma tecla ou um envio. Na delegação, um único listener no elemento pai atende todos os filhos.',
       whenToUse: 'Para responder ao usuário e para listas que mudam, em que itens novos precisam funcionar sem registrar listeners de novo.',
       syntax: code`
 el.addEventListener('click', (e) => {
@@ -105,13 +110,13 @@ el.removeEventListener('click', mesmaFuncao)
 const lista = document.querySelector('#lista')
 
 lista?.addEventListener('click', (e) => {
-  if (!(e.target instanceof Element)) return
   const botao = e.target.closest('button[data-id]')
-  if (!botao) return
+  if (!botao) return // o clique não foi num botão
 
   console.log('Excluir', botao.dataset.id)
   botao.closest('li')?.remove()
 })
+// clique em "Excluir": mostra "Excluir 7" e o item some da lista
 `,
         },
         {
@@ -121,7 +126,7 @@ const form = document.querySelector('form')
 form?.addEventListener('submit', (e) => {
   e.preventDefault() // não recarrega a página
   const dados = new FormData(form)
-  console.log(dados.get('email'))
+  console.log(dados.get('email')) // o valor do campo name="email"
 })
 `,
         },
@@ -132,7 +137,10 @@ form?.addEventListener('submit', (e) => {
           kind: 'tip',
           text: 'Para remover vários listeners de uma vez, passe `{ signal: controller.signal }` e chame `controller.abort()`.',
         },
-        { kind: 'warning', text: 'Nem todo evento sobe para os pais: `focus` e `blur` não sobem; use `focusin` e `focusout` na delegação.' },
+        {
+          kind: 'warning',
+          text: 'Ao tratar um formulário com JavaScript, chame `e.preventDefault()` no `submit`. Sem isso, o navegador recarrega a página.',
+        },
         {
           kind: 'mistake',
           text: 'Remover com uma função diferente: `removeEventListener` precisa da mesma referência usada no `addEventListener`.',
@@ -196,13 +204,14 @@ function ler(chave, padrao) {
 salvar('tema', { escuro: true })
 console.log(ler('tema', { escuro: false }))
 `,
+          output: '{ escuro: true }',
         },
       ],
       tips: [
         { kind: 'tip', text: 'O Storage guarda só strings: sempre use `JSON.stringify` para salvar e `JSON.parse` para ler.' },
         {
           kind: 'warning',
-          text: 'O JSON ignora funções, `undefined` e Symbol; datas viram string; BigInt e referências circulares dão erro.',
+          text: 'O JSON não guarda funções nem `undefined`, e datas voltam como texto: converta de novo com `new Date(texto)`.',
         },
         {
           kind: 'warning',
@@ -235,7 +244,7 @@ export default function dobro(n) {          // export default (um por arquivo)
 // app.js
 import dobro, { soma as somar } from './matematica.js'
 import * as mat from './matematica.js'
-const mod = await import('./matematica.js') // import dinâmico
+const mod = await import('./matematica.js') // import dinâmico: carrega só quando precisar
 `,
       examples: [
         {
@@ -260,7 +269,7 @@ console.log(primaria === tema.primaria) // true
       ],
       tips: [
         { kind: 'tip', text: 'No `import`, o nome nomeado precisa ser igual ao exportado (ou renomeado com `as`); o default aceita qualquer nome.' },
-        { kind: 'tip', text: 'Módulos rodam em modo estrito e são adiados por padrão, como `defer`.' },
+        { kind: 'tip', text: 'Scripts com `type="module"` só rodam depois que o HTML foi lido, como se tivessem `defer`.' },
         {
           kind: 'warning',
           text: 'Abrir o HTML direto pelo `file://` bloqueia módulos. Sirva os arquivos por HTTP (ex.: `npm run dev` no Vite).',

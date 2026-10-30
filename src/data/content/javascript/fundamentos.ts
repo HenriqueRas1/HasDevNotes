@@ -78,7 +78,7 @@ console.log(nome, pontos)
       categoryId: 'js-fundamentos',
       title: 'Variáveis e tipos',
       description:
-        '`const` e `let` criam variáveis com escopo de bloco. Os valores são primitivos (string, number, boolean…) ou objetos.',
+        '`const` e `let` criam variáveis que só existem dentro do bloco `{ }` onde foram declaradas (escopo de bloco). Os valores são primitivos (valores simples, como texto e número) ou objetos.',
       whenToUse:
         'Sempre que guardar um valor. Use `const` por padrão e `let` só quando a variável precisar receber outro valor.',
       syntax: code`
@@ -129,7 +129,7 @@ console.log(pessoa.nome, pontos)
         },
         {
           kind: 'mistake',
-          text: 'Usar `var` em código novo. Ele tem escopo de função, não de bloco, e causa bugs difíceis de achar.',
+          text: 'Usar `var` em código novo. Ele ignora os blocos `{ }` (vale na função inteira) e causa bugs difíceis de achar.',
         },
       ],
       tags: ['variáveis', 'tipos', 'typeof', 'const', 'let'],
@@ -142,7 +142,7 @@ console.log(pessoa.nome, pontos)
       categoryId: 'js-fundamentos',
       title: 'Operadores e truthiness',
       description:
-        'Operadores aritméticos, de comparação e lógicos. Em condições, todo valor é tratado como "truthy" ou "falsy".',
+        'Operadores aritméticos, de comparação e lógicos. Em condições, todo valor conta como verdadeiro ("truthy") ou falso ("falsy"), mesmo que não seja `true` ou `false`.',
       whenToUse:
         'Para fazer contas, comparar valores e escolher valores padrão com `||`, `??` e `&&`.',
       syntax: code`
@@ -202,7 +202,7 @@ console.log(2 ** 3, 7 % 3)
       categoryId: 'js-fundamentos',
       title: 'Coerção e números',
       description:
-        'Coerção é a conversão automática de tipos. Para números, o JavaScript usa ponto flutuante e oferece `Number`, `parseInt` e `Math`.',
+        'Coerção é quando o JavaScript converte um tipo em outro sozinho (ex.: texto em número). Para converter de propósito e fazer contas, use `Number`, `parseInt` e `Math`.',
       whenToUse:
         'Ao converter texto de formulários ou APIs em número, arredondar valores e entender resultados "estranhos" como `"5" + 1`.',
       syntax: code`
@@ -212,10 +212,12 @@ parseFloat('3.14kg')   // 3.14
 String(42)             // '42'
 Boolean('texto')       // true
 
-Number.isNaN(valor)
-Number.isFinite(valor)
-(12.345).toFixed(2)    // string com 2 casas
-Math.round / Math.floor / Math.ceil
+Number.isNaN(valor)    // true se não for um número válido
+Number.isFinite(valor) // true para números comuns
+(12.345).toFixed(2)    // '12.35' (string com 2 casas)
+Math.round(2.5)        // 3  arredonda para o mais próximo
+Math.floor(2.9)        // 2  arredonda para baixo
+Math.ceil(2.1)         // 3  arredonda para cima
 `,
       examples: [
         {
@@ -249,7 +251,7 @@ console.log(Math.max(3, 9, 4))
         },
         {
           kind: 'warning',
-          text: 'Inteiros só são exatos até `Number.MAX_SAFE_INTEGER` (2**53 - 1). Acima disso, use `BigInt`, sem misturar BigInt e Number na mesma conta.',
+          text: 'Números com casas decimais são aproximados: `0.1 + 0.2` dá `0.30000000000000004`. Para dinheiro, trabalhe com centavos inteiros.',
         },
         {
           kind: 'mistake',
@@ -267,14 +269,17 @@ console.log(Math.max(3, 9, 4))
       categoryId: 'js-fundamentos',
       title: 'Strings',
       description:
-        'Textos imutáveis com métodos para buscar, cortar, trocar e formatar. Template literals (crases) permitem interpolar valores.',
+        'Textos com métodos para buscar, cortar, trocar e formatar. Template literals (textos entre crases) permitem inserir valores com `${ }`.',
       whenToUse: 'Para montar mensagens, limpar entradas do usuário, buscar trechos e formatar textos.',
       syntax: code`
 \`Olá, \${nome}!\`          // template literal
 texto.length
 texto.trim()               // remove espaços das pontas
-texto.toLowerCase() / .toUpperCase()
-texto.includes('x') / .startsWith('x') / .endsWith('x')
+texto.toLowerCase()        // tudo minúsculo
+texto.toUpperCase()        // tudo maiúsculo
+texto.includes('x')        // contém 'x'?
+texto.startsWith('x')      // começa com 'x'?
+texto.endsWith('x')        // termina com 'x'?
 texto.slice(inicio, fim)   // fim não entra
 texto.split(',')           // string -> array
 lista.join('-')            // array -> string
@@ -306,11 +311,11 @@ console.log('a-a-a'.replaceAll('a', 'b'))
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Strings são imutáveis: os métodos devolvem uma string nova e não alteram a original.' },
+        { kind: 'tip', text: 'Strings não podem ser alteradas (são imutáveis): os métodos devolvem uma string nova e a original continua igual.' },
         { kind: 'tip', text: 'Dentro de `${ }` cabe qualquer expressão: contas, chamadas de função e ternários.' },
         {
           kind: 'warning',
-          text: '`length` conta unidades UTF-16, não caracteres visuais: um emoji pode ter `length` 2 ou mais.',
+          text: '`length` nem sempre é o número de letras que você vê: um emoji como 😀 tem `length` 2.',
         },
         {
           kind: 'mistake',

@@ -29,7 +29,7 @@ obj.endereco?.cidade     // undefined se endereco for null/undefined
 obj.saudar?.()           // chama só se existir
 obj.papel ?? 'padrão'    // padrão para null/undefined
 delete obj.idade         // remove a propriedade
-Object.hasOwn(obj, 'nome')
+Object.hasOwn(obj, 'nome')  // true se a chave existe no objeto
 `,
       examples: [
         {
@@ -61,11 +61,11 @@ console.log(Object.hasOwn(user, 'nome'))
         { kind: 'tip', text: '`??` preserva `0`, `false` e `""`. Só troca `null` e `undefined`.' },
         {
           kind: 'warning',
-          text: '`?.` não protege uma variável que nunca foi declarada, e `obj.fn?.()` ainda lança `TypeError` se `fn` existir mas não for função.',
+          text: 'Use `?.` só onde o dado realmente pode faltar. Espalhado por todo lado, ele esconde bugs que deveriam aparecer.',
         },
         {
-          kind: 'warning',
-          text: '`"chave" in obj` também olha a cadeia de protótipos. Para testar só as propriedades do próprio objeto, use `Object.hasOwn`.',
+          kind: 'mistake',
+          text: 'Acessar uma propriedade de algo que é `undefined`: `user.endereco.cidade` lança `TypeError` se não houver endereço. Use `user.endereco?.cidade`.',
         },
       ],
       tags: ['objeto', 'optional chaining', 'nullish'],
@@ -87,7 +87,7 @@ Object.values(obj)        // [valor1, ...]
 Object.entries(obj)       // [['chave1', valor1], ...]
 Object.fromEntries(pares) // pares -> objeto
 Object.assign(destino, ...origens)
-Object.freeze(obj)        // impede qualquer mudança (raso)
+Object.freeze(obj)        // impede mudanças (só no primeiro nível)
 Object.seal(obj)          // impede adicionar/remover chaves
 `,
       examples: [
@@ -116,11 +116,10 @@ console.log(comAumento)
       tips: [
         {
           kind: 'tip',
-          text: '`keys`, `values` e `entries` só trazem propriedades próprias e enumeráveis, com chave string.',
+          text: '`keys`, `values` e `entries` devolvem arrays: depois é só usar `map`, `filter` ou `for...of`.',
         },
         { kind: 'warning', text: '`Object.assign(destino, origem)` altera o destino. Para uma cópia, use `Object.assign({}, origem)` ou `{ ...origem }`.' },
-        { kind: 'warning', text: '`freeze` é raso: objetos dentro do objeto congelado ainda podem mudar.' },
-        { kind: 'mistake', text: 'Adicionar métodos em protótipos nativos (`Array.prototype.meuMetodo`). Isso pode quebrar bibliotecas e versões futuras da linguagem.' },
+        { kind: 'warning', text: '`freeze` só congela o primeiro nível: objetos guardados dentro do objeto congelado ainda podem mudar.' },
       ],
       tags: ['objeto', 'entries', 'freeze'],
       relatedIds: ['js-objetos-acesso', 'js-loops', 'js-referencias-copias'],
@@ -180,7 +179,7 @@ console.log(soma(...[2, 3, 5]))
         { kind: 'warning', text: 'O valor padrão só substitui `undefined`, não `null`.' },
         {
           kind: 'warning',
-          text: 'Spread faz cópia rasa: objetos internos continuam compartilhados com o original.',
+          text: 'Spread copia só o primeiro nível (cópia rasa): objetos internos continuam compartilhados com o original. Veja Referências e cópias.',
         },
         { kind: 'mistake', text: 'Colocar o rest antes de outro item: `const [...resto, ultimo] = lista` é erro de sintaxe.' },
       ],
@@ -194,7 +193,7 @@ console.log(soma(...[2, 3, 5]))
       categoryId: 'js-objetos',
       title: 'Referências e cópias',
       description:
-        'Variáveis com objetos guardam uma referência: atribuir não copia. Spread faz cópia rasa; `structuredClone` faz cópia profunda.',
+        'Uma variável com objeto guarda uma referência (o endereço do objeto), não uma cópia. Spread copia só o primeiro nível (cópia rasa); `structuredClone` copia todos os níveis (cópia profunda).',
       whenToUse:
         'Sempre que for alterar um objeto ou array que outra parte do código também usa, como o estado no React.',
       syntax: code`
@@ -203,7 +202,7 @@ const rasa = { ...a }            // novo objeto, filhos compartilhados
 const lista2 = [...lista]        // cópia rasa de array
 const profunda = structuredClone(a)  // cópia completa
 
-// atualizar um nível interno sem mutar
+// atualizar um nível interno sem alterar o original
 const novo = { ...a, perfil: { ...a.perfil, nome: 'Bia' } }
 `,
       examples: [
@@ -239,11 +238,11 @@ console.log({} === {}, a === a)
         },
         {
           kind: 'tip',
-          text: '`structuredClone` copia Map, Set, Date e até referências circulares.',
+          text: '`structuredClone` também copia Map, Set e Date.',
         },
         {
           kind: 'warning',
-          text: '`structuredClone` não copia funções nem elementos do DOM, e o resultado perde o protótipo de classes.',
+          text: '`structuredClone` não copia funções: um objeto com métodos dá erro.',
         },
         {
           kind: 'mistake',
@@ -265,13 +264,19 @@ console.log({} === {}, a === a)
         'Map: dicionários que mudam muito ou com chaves que não são strings. Set: remover duplicados e testar se um valor existe.',
       syntax: code`
 const mapa = new Map([['chave', valor]])
-mapa.set(k, v) / mapa.get(k) / mapa.has(k) / mapa.delete(k)
-mapa.size / mapa.clear()
+mapa.set(k, v)      // adiciona ou troca
+mapa.get(k)         // valor ou undefined
+mapa.has(k)         // true/false
+mapa.delete(k)      // remove
+mapa.size           // quantidade de pares
+mapa.clear()        // esvazia
 
-const conjunto = new Set([1, 2, 2])
-conjunto.add(v) / conjunto.has(v) / conjunto.delete(v)
+const conjunto = new Set([1, 2, 2])  // guarda só 1 e 2
+conjunto.add(v)
+conjunto.has(v)
+conjunto.delete(v)
 conjunto.size
-[...conjunto]  // Set -> array
+const lista = [...conjunto]  // Set -> array
 `,
       examples: [
         {
@@ -301,7 +306,7 @@ console.log([...new Set([1, 1, 2, 3, 3])])
       ],
       tips: [
         { kind: 'tip', text: 'Map e Set mantêm a ordem de inserção ao percorrer com `for...of`.' },
-        { kind: 'tip', text: '`[...new Set(lista)]` remove duplicados de uma lista de primitivos.' },
+        { kind: 'tip', text: '`[...new Set(lista)]` remove duplicados de uma lista de textos ou números.' },
         {
           kind: 'warning',
           text: 'Objetos são comparados por referência: `new Set([{}, {}]).size` é 2.',

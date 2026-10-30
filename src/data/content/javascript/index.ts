@@ -12,9 +12,10 @@ import { utilitarios } from './utilitarios'
 
 /**
  * JavaScript tem muitas categorias, então cada uma fica no seu arquivo.
- * A ordem desta lista é a ordem em que as categorias aparecem na tela.
+ * A ordem desta lista é a ordem em que as categorias aparecem na tela, e segue
+ * uma trilha de estudo: cada categoria só usa conceitos das anteriores.
  */
-const groups = [fundamentos, arrays, objetos, fluxo, funcoes, assincrono, navegador, classes, utilitarios, boasPraticas]
+const groups = [fundamentos, fluxo, funcoes, arrays, objetos, assincrono, navegador, classes, utilitarios, boasPraticas]
 
 export const javascript: TechnologyContent = {
   technology: {

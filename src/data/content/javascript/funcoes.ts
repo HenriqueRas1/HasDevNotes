@@ -18,7 +18,7 @@ export const funcoes: CategoryContent = {
       categoryId: 'js-funcoes',
       title: 'Funções e callbacks',
       description:
-        'Funções são valores: podem ser guardadas em variáveis, passadas para outras funções (callbacks) e retornadas.',
+        'Funções são valores: podem ser guardadas em variáveis, passadas para outras funções e retornadas. Uma função passada para outra é chamada de callback.',
       whenToUse: 'Para reutilizar lógica, dar nome a uma operação e personalizar o comportamento de outra função.',
       syntax: code`
 function nome(param = 'padrão') {   // declaração
@@ -31,7 +31,7 @@ const somar = function (a, b) {     // expressão
 
 const dobro = (n) => n * 2          // arrow: retorno implícito
 const criar = (nome) => ({ nome })  // objeto: envolva em ()
-const total = (...nums) => {}       // rest: junta argumentos
+const total = (...nums) => {}       // rest: junta os argumentos num array
 `,
       examples: [
         {
@@ -63,10 +63,10 @@ console.log(aplicar('oi', (t) => t.toUpperCase()))
       tips: [
         { kind: 'tip', text: 'Sem `return`, a função devolve `undefined`.' },
         { kind: 'tip', text: 'O parâmetro padrão só entra quando o argumento é `undefined`.' },
-        { kind: 'tip', text: 'Prefira `...rest` ao objeto `arguments`: o rest é um array de verdade e funciona em arrow functions.' },
+        { kind: 'tip', text: 'Com `...nums` (rest), a função aceita quantos argumentos vierem, e eles chegam como um array.' },
         {
           kind: 'warning',
-          text: 'Arrow functions não têm `this` nem `arguments` próprios e não podem ser usadas com `new`.',
+          text: 'Arrow functions não têm `this` próprio (veja "this, call, apply e bind"). Para métodos de objetos, prefira a forma comum.',
         },
         {
           kind: 'mistake',
@@ -96,16 +96,16 @@ function somar(a, b) { return a + b }
 console.log(v)           // undefined (var é inicializado com undefined)
 var v = 3
 
-console.log(y)           // ❌ ReferenceError (TDZ)
+console.log(y)           // ❌ ReferenceError: let não pode ser usado antes
 let y = 4
 `,
       examples: [
         {
-          caption: 'Escopo de bloco e sombra',
+          caption: 'Mesmo nome, variáveis diferentes',
           code: code`
 let x = 1
 {
-  let x = 2 // "sombra" a variável de fora
+  let x = 2 // nova variável, só existe dentro deste bloco
   console.log(x)
 }
 console.log(x)
@@ -133,17 +133,20 @@ console.log(calcular(200))
       tips: [
         {
           kind: 'tip',
-          text: 'O escopo é léxico: depende de onde a função foi escrita, não de onde ela é chamada.',
+          text: 'O que uma função enxerga depende de onde ela foi escrita no código, não de onde ela é chamada.',
         },
         {
           kind: 'tip',
-          text: 'Hoisting não move o código. `let`, `const` e `class` ficam na "zona morta temporal" (TDZ) até a linha da declaração.',
+          text: 'Hoisting não move o código de lugar. `let`, `const` e `class` não podem ser usados antes da linha em que são declarados.',
         },
         {
           kind: 'warning',
           text: 'Expressões de função e arrow functions guardadas em `const` não podem ser chamadas antes da definição.',
         },
-        { kind: 'mistake', text: 'Reaproveitar o mesmo nome dentro de uma função e alterar sem querer a variável errada (shadowing).' },
+        {
+          kind: 'mistake',
+          text: 'Criar uma variável interna com o mesmo nome de uma externa e alterar a errada sem perceber. Isso se chama shadowing ("sombra").',
+        },
       ],
       tags: ['escopo', 'hoisting', 'tdz', 'var'],
       relatedIds: ['js-closures', 'js-variaveis-tipos', 'js-funcoes-callbacks'],
@@ -194,9 +197,9 @@ for (let i = 0; i < 3; i++) {
   funcoes.push(() => i)
 }
 
-console.log(funcoes.map((f) => f()))
+console.log(funcoes[0](), funcoes[1](), funcoes[2]())
 `,
-          output: '[0, 1, 2]',
+          output: '0 1 2',
         },
       ],
       tips: [
@@ -207,7 +210,7 @@ console.log(funcoes.map((f) => f()))
         { kind: 'tip', text: 'Hooks do React dependem de closures: cada renderização captura os valores daquele momento.' },
         {
           kind: 'mistake',
-          text: 'Usar `var` no `for`: todas as funções compartilham a mesma variável e o exemplo acima mostraria `[3, 3, 3]`.',
+          text: 'Usar `var` no `for`: todas as funções compartilham a mesma variável e o exemplo acima mostraria `3 3 3`.',
         },
       ],
       tags: ['closure', 'escopo', 'estado privado'],
@@ -226,7 +229,7 @@ console.log(funcoes.map((f) => f()))
       syntax: code`
 obj.metodo()                  // this = obj
 const solta = obj.metodo
-solta()                       // this = undefined (modo estrito)
+solta()                       // this = undefined (perdeu o objeto)
 
 fn.call(ctx, a, b)            // chama com this = ctx
 fn.apply(ctx, [a, b])         // igual, argumentos em array
@@ -270,11 +273,7 @@ console.log(timer.avancar())
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Com `new Classe()`, o `this` é a nova instância criada.' },
-        {
-          kind: 'tip',
-          text: '`call`, `apply` e `bind` não mudam o `this` de arrow functions: elas sempre usam o `this` do escopo externo.',
-        },
+        { kind: 'tip', text: 'Com `new Classe()`, o `this` é o novo objeto que está sendo criado.' },
         {
           kind: 'warning',
           text: 'Não use arrow function como método que precisa do objeto: `{ ler: () => this.nome }` não enxerga o objeto.',

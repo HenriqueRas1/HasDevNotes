@@ -147,14 +147,13 @@ for (const [i, cor] of ['azul', 'verde'].entries()) {
         },
       ],
       tips: [
-        { kind: 'tip', text: 'Para esperar tarefas assíncronas em sequência, use `for...of` com `await` dentro.' },
         {
-          kind: 'warning',
-          text: '`for...in` lê as chaves (inclusive herdadas), não os valores. Evite em arrays.',
+          kind: 'tip',
+          text: 'Para esperar uma tarefa demorada (como uma requisição) antes da próxima, use `for...of` com `await` dentro. O `forEach` não espera. Veja a categoria Assíncrono.',
         },
         {
-          kind: 'mistake',
-          text: 'Usar `forEach` com callback `async`: ele não espera as Promises. Use `for...of` com `await` ou `Promise.all`.',
+          kind: 'warning',
+          text: '`for...in` percorre os nomes das chaves, não os valores. Evite em arrays.',
         },
         { kind: 'mistake', text: 'Esquecer de atualizar a variável da condição no `while`: o loop nunca termina.' },
       ],
@@ -228,10 +227,13 @@ console.log(tentar(-1))
           kind: 'tip',
           text: 'Tipos comuns: `TypeError` (operação no tipo errado), `ReferenceError` (nome inexistente), `SyntaxError` e `RangeError` (valor fora da faixa).',
         },
-        { kind: 'tip', text: 'Lance sempre `Error` (ou uma subclasse), não strings: o erro traz a pilha de chamadas para depurar.' },
+        {
+          kind: 'tip',
+          text: 'Lance sempre `new Error(...)` (ou tipos como `TypeError`), não strings: o erro registra o caminho de chamadas até a linha que falhou, o que ajuda a depurar.',
+        },
         {
           kind: 'warning',
-          text: '`try`/`catch` não captura uma Promise rejeitada sem `await`, nem um erro lançado depois dentro de um `setTimeout`.',
+          text: 'Em código assíncrono, o `try`/`catch` só captura o erro se você usar `await`. Veja a categoria Assíncrono.',
         },
         { kind: 'mistake', text: 'Deixar o `catch` vazio: o erro some e o bug fica escondido. No mínimo, registre com `console.error`.' },
       ],

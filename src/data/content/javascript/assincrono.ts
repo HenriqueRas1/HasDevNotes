@@ -30,6 +30,7 @@ async function carregar() {
   }
 }
 
+// os await abaixo precisam estar dentro de uma função async (ou num módulo)
 await Promise.all([t1(), t2()])        // todas; falha na primeira rejeição
 await Promise.allSettled([t1(), t2()]) // todas, com o estado de cada
 await Promise.race([t1(), t2()])       // a primeira a terminar
@@ -41,6 +42,7 @@ tarefa().then(usar).catch(tratar).finally(limpar)
         {
           caption: 'await e Promise.all',
           code: code`
+// await fora de função: funciona em módulos (type="module") e no console
 async function dobro(n) {
   return n * 2
 }
@@ -71,7 +73,10 @@ console.log(estados.map((e) => e.status))
           kind: 'tip',
           text: 'Para itens independentes, `await Promise.all(itens.map(tarefa))` é bem mais rápido que um `await` por vez.',
         },
-        { kind: 'warning', text: '`await` só funciona dentro de funções `async` ou no topo de um módulo ES.' },
+        {
+          kind: 'warning',
+          text: '`await` só funciona dentro de funções `async` ou fora de funções num módulo (`<script type="module">`, projetos Vite). Num arquivo `.js` comum do Node, dá erro.',
+        },
         { kind: 'mistake', text: 'Esquecer o `await`: a variável recebe a Promise, não o valor, e erros passam sem tratamento.' },
       ],
       tags: ['promise', 'async', 'await', 'assíncrono'],
@@ -84,7 +89,7 @@ console.log(estados.map((e) => e.status))
       categoryId: 'js-assincrono',
       title: 'Event loop e temporizadores',
       description:
-        'O JavaScript roda uma coisa por vez. O event loop executa o código síncrono, depois as microtarefas (Promises) e só então as tarefas como timers.',
+        'O JavaScript roda uma coisa por vez. O event loop decide a ordem: primeiro o código normal, depois as Promises que ficaram prontas e só então os timers.',
       whenToUse:
         'Para entender a ordem em que o código assíncrono roda, criar atrasos com `setTimeout` e evitar travar a interface.',
       syntax: code`
@@ -94,7 +99,7 @@ clearTimeout(id)
 const id2 = setInterval(fn, ms)  // repete a cada ms
 clearInterval(id2)
 
-// esperar com await
+// esperar com await (dentro de uma função async)
 const esperar = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 await esperar(500)
 `,
@@ -120,14 +125,14 @@ async function rodar() {
   console.log('Depois')
 }
 
-await rodar()
+rodar()
 `,
           output: 'Antes\nDepois',
         },
       ],
       tips: [
         { kind: 'tip', text: '`await` libera a execução para outras tarefas: não bloqueia a página.' },
-        { kind: 'tip', text: 'O atraso do `setTimeout` é mínimo, não exato: ele espera o código atual e as microtarefas terminarem.' },
+        { kind: 'tip', text: 'O atraso do `setTimeout` é mínimo, não exato: ele espera o código atual e as Promises prontas terminarem.' },
         {
           kind: 'warning',
           text: 'Cálculos pesados travam a interface mesmo dentro de funções `async`. Divida o trabalho ou use Web Workers.',
@@ -166,9 +171,9 @@ async function carregarUser() {
 
 try {
   const user = await carregarUser()
-  console.log(user)
+  console.log(user)     // ex.: { id: 1, nome: 'Maya' }
 } catch (erro) {
-  console.error('Falha ao carregar', erro)
+  console.error('Falha ao carregar', erro) // ex.: Error: HTTP 404
 }
 `,
         },
@@ -226,7 +231,7 @@ try {
     signal: AbortSignal.timeout(5000),
   })
   if (!res.ok) throw new Error(\`HTTP \${res.status}\`)
-  console.log(await res.json())
+  console.log(await res.json()) // ex.: { id: 7, nome: 'Caderno' }
 } catch (erro) {
   if (erro.name === 'TimeoutError') console.log('Demorou demais')
   else console.error(erro)
@@ -251,6 +256,9 @@ async function buscar(termo) {
     if (erro.name !== 'AbortError') throw erro
   }
 }
+
+buscar('ca')
+buscar('caf') // cancela a busca por 'ca'; só a de 'caf' chega ao fim
 `,
         },
       ],
@@ -258,7 +266,7 @@ async function buscar(termo) {
         { kind: 'tip', text: 'GET lê, POST cria, PUT substitui, PATCH altera parte e DELETE remove.' },
         {
           kind: 'warning',
-          text: 'CORS é decidido pelo servidor. O modo `no-cors` não libera a leitura da resposta.',
+          text: 'Erro de CORS (o navegador impede um site de ler respostas de outro domínio) se resolve no servidor da API, não no `fetch`.',
         },
         {
           kind: 'warning',
